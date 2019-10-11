@@ -105,7 +105,7 @@ between different runs. We report the median on 5 runs (with different seeds) fo
 |-------|------------------------------|-------------|-----------------|
 | CoLA  | Matthew's corr               | 48.87       | 0.5             |
 | SST-2 | Accuracy                     | 91.74       | 1.5             |
-| MRPC  | F1/Accuracy                  | 90.70/86.27 | 0.5             |
+| MRPC  | F1/Accuracy                  | 90.70/86.27 | 0.2             |
 | STS-B | Person/Spearman corr.        | 91.39/91.04 | 0.5             |
 | QQP   | Accuracy/F1                  | 90.79/87.66 | 6               |
 | MNLI  | Matched acc./Mismatched acc. | 83.70/84.83 | 6               |
