@@ -93,12 +93,31 @@ def train(args, train_dataset, model, tokenizer):
     else:
         t_total = len(train_dataloader) // args.gradient_accumulation_steps * args.num_train_epochs
 
+    # filter weights to train
+
+    if args.layers_to_fine_tune:
+        logger.info(f"Finetuning layers: {str(args.layers_to_fine_tune)}")
+
+        parameters = []
+
+        for name, params in model.named_parameters():
+            if name.startswith('bert.encoder'):
+                for layer in args.layers_to_fine_tune:
+                    if f"layer.{layer}" in name:
+                        parameters.append((name, params))
+                        break
+            elif name.startswith('bert.embeddings'):
+                continue
+            else:
+                parameters.append((name, params))
+
     # Prepare optimizer and schedule (linear warmup and decay)
     no_decay = ['bias', 'LayerNorm.weight']
     optimizer_grouped_parameters = [
-        {'params': [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)], 'weight_decay': args.weight_decay},
-        {'params': [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
+        {'params': [p for n, p in parameters if not any(nd in n for nd in no_decay)], 'weight_decay': args.weight_decay},
+        {'params': [p for n, p in parameters if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
         ]
+
     optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate, eps=args.adam_epsilon)
     scheduler = WarmupLinearSchedule(optimizer, warmup_steps=args.warmup_steps, t_total=t_total)
     if args.fp16:
@@ -408,6 +427,13 @@ def main():
                         help="For distributed training: local_rank")
     parser.add_argument('--server_ip', type=str, default='', help="For distant debugging.")
     parser.add_argument('--server_port', type=str, default='', help="For distant debugging.")
+
+    # layers to keep
+    parser.add_argument(
+        "--layers_to_fine_tune", type=int, nargs="*",
+        help="layer numbers(0~11) separated by space"
+    )
+
     args = parser.parse_args()
 
     if os.path.exists(args.output_dir) and os.listdir(args.output_dir) and args.do_train and not args.overwrite_output_dir:

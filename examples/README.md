@@ -101,17 +101,17 @@ uncased  BERT base model (the checkpoint `bert-base-uncased`). All experiments r
 batch size of 24. Some of these tasks have a small dataset and training can lead to high variance in the results
 between different runs. We report the median on 5 runs (with different seeds) for each of the metrics.
 
-| Task  | Metric                       | Result      |
-|-------|------------------------------|-------------|
-| CoLA  | Matthew's corr               | 48.87       |
-| SST-2 | Accuracy                     | 91.74       |
-| MRPC  | F1/Accuracy                  | 90.70/86.27 |
-| STS-B | Person/Spearman corr.        | 91.39/91.04 |
-| QQP   | Accuracy/F1                  | 90.79/87.66 |
-| MNLI  | Matched acc./Mismatched acc. | 83.70/84.83 |
-| QNLI  | Accuracy                     | 89.31       |
-| RTE   | Accuracy                     | 71.43       |
-| WNLI  | Accuracy                     | 43.66       |
+| Task  | Metric                       | Result      | Finetuning (hr) |
+|-------|------------------------------|-------------|-----------------|
+| CoLA  | Matthew's corr               | 48.87       | 0.5             |
+| SST-2 | Accuracy                     | 91.74       | 1.5             |
+| MRPC  | F1/Accuracy                  | 90.70/86.27 | 0.5             |
+| STS-B | Person/Spearman corr.        | 91.39/91.04 | 0.5             |
+| QQP   | Accuracy/F1                  | 90.79/87.66 | 6               |
+| MNLI  | Matched acc./Mismatched acc. | 83.70/84.83 | 6               |
+| QNLI  | Accuracy                     | 89.31       | 2               |
+| RTE   | Accuracy                     | 71.43       | 0.2             |
+| WNLI  | Accuracy                     | 43.66       | 0.2             |
 
 Some of these results are significantly different from the ones reported on the test set
 of GLUE benchmark on the website. For QQP and WNLI, please refer to [FAQ #12](https://gluebenchmark.com/faq) on the webite.
