@@ -9,6 +9,6 @@ source ~/ENV/bin/activate
 TASK='QNLI'
 SEED=$1
 
-bash scripts/bert-base/finetune.sh $TASK $SEED 23 22 21 20 19 18 17 16
+bash scripts/bert-large/finetune.sh $TASK $SEED 23 22 21 20 19 18 17 16
 
 deactivate

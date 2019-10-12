@@ -1,16 +1,32 @@
 TASK=$1
-SEED=$2
-LAYERS_TO_FINE_TUNE="${@:3}"
+EXP=$2
+SEED=$3
+LAYERS_TO_FINE_TUNE="${@:4}"
 
-OUTPUT_DIR=models/bert-base/$TASK/${LAYERS_TO_FINE_TUNE// /_}/$SEED
+if [ $EXP == "BASE" ] # no fine tuning
+then
+    LAYER_FOLDER_NAME="base"
+elif [ $EXP == "FT" ] # fine tune given layers
+then
+    LAYER_FOLDER_NAME=${LAYERS_TO_FINE_TUNE// /_}
+elif [ $EXP == "NONE" ] # No layers to fine tune (only classifier)
+then
+    LAYER_FOLDER_NAME="no_layer"
+else
+    echo "Invalid experiment: "$EXP
+    exit 1
+fi
+
+
+OUTPUT_DIR=models/bert-base/$TASK/$LAYER_FOLDER_NAME/$SEED
 mkdir -p $OUTPUT_DIR
 
 LOG_FILE_DIR=logs/bert-base/$TASK/
 mkdir -p $LOG_FILE_DIR
 
 echo "TASK: "$TASK
+echo "EXP: "$EXP
 echo "SEED: "$SEED
-echo "LAYERS_TO_FINE_TUNE: "$LAYERS_TO_FINE_TUNE
 echo "OUTPUT_DIR: "$OUTPUT_DIR
 
 # setup metrics
@@ -33,7 +49,7 @@ then
 elif [ $TASK == "MNLI" ]
 then
     METRICS+=("acc")
-    MM_OUTPUT_DIR=models/bert-base/$TASK-MM/${LAYERS_TO_FINE_TUNE// /_}/$SEED
+    MM_OUTPUT_DIR=models/bert-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
     MM_LOG_FILE_DIR=logs/bert-base/$TASK-MM/
     mkdir -p $MM_OUTPUT_DIR
     mkdir -p $MM_LOG_FILE_DIR
@@ -52,23 +68,64 @@ else
 fi
 
 # run finetuning
-python examples/run_glue.py \
-  --model_type bert \
-  --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
-  --task_name $TASK \
-  --do_train \
-  --do_eval \
-  --do_lower_case \
-  --data_dir $DATA_DIR/glue/$TASK/ \
-  --max_seq_length 128 \
-  --per_gpu_train_batch_size 24 \
-  --learning_rate 2e-5 \
-  --num_train_epochs 3.0 \
-  --save_steps 500 \
-  --seed $SEED \
-  --layers_to_fine_tune $LAYERS_TO_FINE_TUNE \
-  --output_dir $OUTPUT_DIR \
-  --overwrite_output_dir
+
+if [ $EXP == "BASE" ] # no fine tuning
+then
+    python examples/run_glue.py \
+      --model_type bert \
+      --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+      --task_name $TASK \
+      --do_train \
+      --do_eval \
+      --do_lower_case \
+      --data_dir $DATA_DIR/glue/$TASK/ \
+      --max_seq_length 128 \
+      --per_gpu_train_batch_size 8 \
+      --learning_rate 2e-5 \
+      --num_train_epochs 3.0 \
+      --save_steps 0 \
+      --seed $SEED \
+      --output_dir $OUTPUT_DIR \
+      --overwrite_output_dir
+elif [ $EXP == "FT" ] # fine tune given layers
+then
+    python examples/run_glue.py \
+      --model_type bert \
+      --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+      --task_name $TASK \
+      --do_train \
+      --do_eval \
+      --do_lower_case \
+      --data_dir $DATA_DIR/glue/$TASK/ \
+      --max_seq_length 128 \
+      --per_gpu_train_batch_size 8 \
+      --learning_rate 2e-5 \
+      --num_train_epochs 3.0 \
+      --save_steps 0 \
+      --seed $SEED \
+      --layers_to_fine_tune $LAYERS_TO_FINE_TUNE \
+      --output_dir $OUTPUT_DIR \
+      --overwrite_output_dir
+elif [ $EXP == "NONE" ] # No layers to fine tune (only classifier)
+then
+    python examples/run_glue.py \
+      --model_type bert \
+      --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+      --task_name $TASK \
+      --do_train \
+      --do_eval \
+      --do_lower_case \
+      --data_dir $DATA_DIR/glue/$TASK/ \
+      --max_seq_length 128 \
+      --per_gpu_train_batch_size 8 \
+      --learning_rate 2e-5 \
+      --num_train_epochs 3.0 \
+      --save_steps 0 \
+      --seed $SEED \
+      --only_classifier \
+      --output_dir $OUTPUT_DIR \
+      --overwrite_output_dir
+fi
 
 echo "RESULTS"
 
@@ -78,7 +135,7 @@ do
 
     echo $METRIC" = "$RESULT
 
-    LOG_FILE=$LOG_FILE_DIR/${LAYERS_TO_FINE_TUNE// /_}-$METRIC.txt
+    LOG_FILE=$LOG_FILE_DIR/$LAYER_FOLDER_NAME-$METRIC.txt
     touch $LOG_FILE
 
     echo -e "$SEED\t$RESULT" >> $LOG_FILE
@@ -95,8 +152,12 @@ then
         echo "RESULTS"
         echo $METRIC" = "$RESULT
 
-        LOG_FILE=$MM_LOG_FILE_DIR/${LAYERS_TO_FINE_TUNE// /_}-$METRIC.txt
+        LOG_FILE=$MM_LOG_FILE_DIR/$LAYER_FOLDER_NAME-$METRIC.txt
         touch $LOG_FILE
         echo -e "$SEED\t$RESULT" >> $LOG_FILE
     done
 fi
+
+rm $OUTPUT_DIR/*.bin
+rm $OUTPUT_DIR/*.json
+rm $OUTPUT_DIR/vocab.txt

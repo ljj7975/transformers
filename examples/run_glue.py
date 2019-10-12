@@ -95,14 +95,16 @@ def train(args, train_dataset, model, tokenizer):
 
     # filter weights to train
 
-    if args.layers_to_fine_tune:
+    if args.only_classifier:
+        logger.info("Only training last classifier")
+        args.layers_to_fine_tune = []
+    elif args.layers_to_fine_tune:
         logger.info(f"Finetuning layers: {str(args.layers_to_fine_tune)}")
 
-        # for name, params in model.named_parameters():
-        #     print(name, params.size())
+    parameters = model.named_parameters()
 
+    if args.only_classifier or args.layers_to_fine_tune:
         parameters = []
-
         for name, params in model.named_parameters():
             if name.startswith('bert.encoder'):
                 for layer in args.layers_to_fine_tune:
@@ -113,6 +115,9 @@ def train(args, train_dataset, model, tokenizer):
                 continue
             else:
                 parameters.append((name, params))
+
+    # for name, params in parameters:
+    #     print(name, params.size())
 
     # Prepare optimizer and schedule (linear warmup and decay)
     no_decay = ['bias', 'LayerNorm.weight']
@@ -439,6 +444,9 @@ def main():
     parser.add_argument(
         "--layers_to_fine_tune", type=int, nargs="*",
         help="layer numbers(0~11) separated by space"
+    )
+    parser.add_argument(
+        "--only_classifier", action='store_true', help="only fine-tune last classifier"
     )
 
     args = parser.parse_args()
