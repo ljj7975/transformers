@@ -9,16 +9,16 @@ source ~/ENV/bin/activate
 TASK='STS-B'
 SEED=$1
 
-bash fine_tune.sh $TASK $SEED 11
+bash scripts/bert-base/finetune.sh $TASK $SEED 11
 
-bash fine_tune.sh $TASK $SEED 11 10
+bash scripts/bert-base/finetune.sh $TASK $SEED 11 10
 
-bash fine_tune.sh $TASK $SEED 11 10 9
+bash scripts/bert-base/finetune.sh $TASK $SEED 11 10 9
 
-bash fine_tune.sh $TASK $SEED 11 10 9 8
+bash scripts/bert-base/finetune.sh $TASK $SEED 11 10 9 8
 
-bash fine_tune.sh $TASK $SEED 11 10 9 8 7
+bash scripts/bert-base/finetune.sh $TASK $SEED 11 10 9 8 7
 
-bash fine_tune.sh $TASK $SEED 11 10 9 8 7 6
+bash scripts/bert-base/finetune.sh $TASK $SEED 11 10 9 8 7 6
 
 deactivate
