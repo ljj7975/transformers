@@ -9,6 +9,6 @@ source ~/ENV/bin/activate
 TASK='MNLI'
 SEED=$1
 
-bash scripts/bert-base/finetune.sh $TASK $SEED 11
+bash scripts/bert-base/finetune.sh $TASK "FT" $SEED 11
 
 deactivate
