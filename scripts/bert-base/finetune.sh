@@ -2,10 +2,10 @@ TASK=$1
 SEED=$2
 LAYERS_TO_FINE_TUNE="${@:3}"
 
-OUTPUT_DIR=models/bert/$TASK/${LAYERS_TO_FINE_TUNE// /_}/$SEED
+OUTPUT_DIR=models/bert-base/$TASK/${LAYERS_TO_FINE_TUNE// /_}/$SEED
 mkdir -p $OUTPUT_DIR
 
-LOG_FILE_DIR=logs/bert/$TASK/
+LOG_FILE_DIR=logs/bert-base/$TASK/
 mkdir -p $LOG_FILE_DIR
 
 echo "TASK: "$TASK
@@ -33,8 +33,8 @@ then
 elif [ $TASK == "MNLI" ]
 then
     METRICS+=("acc")
-    MM_OUTPUT_DIR=models/bert/$TASK-MM/${LAYERS_TO_FINE_TUNE// /_}/$SEED
-    MM_LOG_FILE_DIR=logs/bert/$TASK-MM/
+    MM_OUTPUT_DIR=models/bert-base/$TASK-MM/${LAYERS_TO_FINE_TUNE// /_}/$SEED
+    MM_LOG_FILE_DIR=logs/bert-base/$TASK-MM/
     mkdir -p $MM_OUTPUT_DIR
     mkdir -p $MM_LOG_FILE_DIR
 elif [ $TASK == "QNLI" ]
@@ -80,7 +80,8 @@ do
 
     LOG_FILE=$LOG_FILE_DIR/${LAYERS_TO_FINE_TUNE// /_}-$METRIC.txt
     touch $LOG_FILE
-    echo $RESULT >> $LOG_FILE
+
+    echo -e "$SEED\t$RESULT" >> $LOG_FILE
 done
 
 if [ $TASK == "MNLI" ]
@@ -96,6 +97,6 @@ then
 
         LOG_FILE=$MM_LOG_FILE_DIR/${LAYERS_TO_FINE_TUNE// /_}-$METRIC.txt
         touch $LOG_FILE
-        echo $RESULT >> $LOG_FILE
+        echo -e "$SEED\t$RESULT" >> $LOG_FILE
     done
 fi
