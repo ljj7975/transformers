@@ -74,7 +74,7 @@ echo "RESULTS"
 
 for METRIC in "${METRICS[@]}"
 do
-    RESULT=$(cat $OUTPUT_DIR/eval_results.txt | grep $METRIC | rev | cut -d" " -f1 | rev)
+    RESULT=$(cat $OUTPUT_DIR/eval_results.txt | grep $METRIC" =" | rev | cut -d" " -f1 | rev)
 
     echo $METRIC" = "$RESULT
 
@@ -90,7 +90,7 @@ then
 
     for METRIC in "${METRICS[@]}"
     do
-        RESULT=$(cat $MM_OUTPUT_DIR/eval_results.txt | grep $METRIC | rev | cut -d" " -f1 | rev)
+        RESULT=$(cat $MM_OUTPUT_DIR/eval_results.txt | grep $METRIC" =" | rev | cut -d" " -f1 | rev)
 
         echo "RESULTS"
         echo $METRIC" = "$RESULT
