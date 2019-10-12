@@ -98,6 +98,9 @@ def train(args, train_dataset, model, tokenizer):
     if args.layers_to_fine_tune:
         logger.info(f"Finetuning layers: {str(args.layers_to_fine_tune)}")
 
+        # for name, params in model.named_parameters():
+        #     print(name, params.size())
+
         parameters = []
 
         for name, params in model.named_parameters():
