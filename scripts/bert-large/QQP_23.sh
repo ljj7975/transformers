@@ -9,6 +9,6 @@ source ~/ENV/bin/activate
 TASK='QQP'
 SEED=$1
 
-bash scripts/bert-large/finetune.sh $TASK $SEED 23
+bash scripts/bert-large/finetune.sh $TASK "FT" $SEED 23
 
 deactivate
