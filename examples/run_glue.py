@@ -106,15 +106,16 @@ def train(args, train_dataset, model, tokenizer):
     if args.only_classifier or args.layers_to_fine_tune:
         parameters = []
         for name, params in model.named_parameters():
-            if name.startswith('bert.encoder'):
-                for layer in args.layers_to_fine_tune:
-                    if f"layer.{layer}" in name:
-                        parameters.append((name, params))
-                        break
-            elif name.startswith('bert.embeddings'):
-                continue
-            else:
-                parameters.append((name, params))
+            if args.model_type == 'bert' or args.model_type == 'roberta':
+                if 'encoder' in name:
+                    for layer in args.layers_to_fine_tune:
+                        if f"layer.{layer}" in name:
+                            parameters.append((name, params))
+                            break
+                elif 'embeddings' in name:
+                    continue
+                else:
+                    parameters.append((name, params))
 
     # for name, params in parameters:
     #     print(name, params.size())

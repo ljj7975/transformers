@@ -18,10 +18,10 @@ else
 fi
 
 
-OUTPUT_DIR=models/bert-base/$TASK/$LAYER_FOLDER_NAME/$SEED
+OUTPUT_DIR=models/roberta-base/$TASK/$LAYER_FOLDER_NAME/$SEED
 mkdir -p $OUTPUT_DIR
 
-LOG_FILE_DIR=logs/bert-base/$TASK/
+LOG_FILE_DIR=logs/roberta-base/$TASK/
 mkdir -p $LOG_FILE_DIR
 
 echo "TASK: "$TASK
@@ -49,8 +49,8 @@ then
 elif [ $TASK == "MNLI" ]
 then
     METRICS+=("acc")
-    MM_OUTPUT_DIR=models/bert-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
-    MM_LOG_FILE_DIR=logs/bert-base/$TASK-MM/
+    MM_OUTPUT_DIR=models/roberta-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
+    MM_LOG_FILE_DIR=logs/roberta-base/$TASK-MM/
     mkdir -p $MM_OUTPUT_DIR
     mkdir -p $MM_LOG_FILE_DIR
 elif [ $TASK == "QNLI" ]
@@ -72,8 +72,8 @@ fi
 if [ $EXP == "BASE" ] # no fine tuning
 then
     python examples/run_glue.py \
-      --model_type bert \
-      --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+      --model_type roberta \
+      --model_name_or_path $TRAINED_MODEL_DIR/roberta-base \
       --task_name $TASK \
       --do_train \
       --do_eval \
@@ -90,8 +90,8 @@ then
 elif [ $EXP == "FT" ] # fine tune given layers
 then
     python examples/run_glue.py \
-      --model_type bert \
-      --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+      --model_type roberta \
+      --model_name_or_path $TRAINED_MODEL_DIR/roberta-base \
       --task_name $TASK \
       --do_train \
       --do_eval \
@@ -109,8 +109,8 @@ then
 elif [ $EXP == "NONE" ] # No layers to fine tune (only classifier)
 then
     python examples/run_glue.py \
-      --model_type bert \
-      --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+      --model_type roberta \
+      --model_name_or_path $TRAINED_MODEL_DIR/roberta-base \
       --task_name $TASK \
       --do_train \
       --do_eval \
@@ -160,4 +160,4 @@ fi
 
 rm $OUTPUT_DIR/*.bin
 rm $OUTPUT_DIR/*.json
-rm $OUTPUT_DIR/vocab.txt
+rm $OUTPUT_DIR/merges.txt
