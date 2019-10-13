@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --account=def-jimmylin
+#SBATCH --account=def-lilimou
 #SBATCH --time=0-012:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --output=roberta-base-SST-2-all.out
 #SBATCH --mem=64G
 
-source ~/ENV/bin/activate
+ 
 
 TASK='SST-2'
 SEED=$1
@@ -27,4 +27,4 @@ bash scripts/roberta-base/finetune.sh $TASK "FT" $SEED 11 10 9 8 7
 
 bash scripts/roberta-base/finetune.sh $TASK "FT" $SEED 11 10 9 8 7 6
 
-deactivate
+ 
