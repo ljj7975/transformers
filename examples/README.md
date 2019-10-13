@@ -109,7 +109,7 @@ between different runs. We report the median on 5 runs (with different seeds) fo
 | STS-B | Person/Spearman corr.        | 91.39/91.04 | 0.5 hr          | 0.5 hr          |
 | QQP   | Accuracy/F1                  | 90.79/87.66 | 6.0 hr          | 18.0 hr         |
 | MNLI  | Matched acc./Mismatched acc. | 83.70/84.83 | 6.0 hr          | 18.0 hr         |
-| QNLI  | Accuracy                     | 89.31       | 2.0 hr          | 18.0 hr         |
+| QNLI  | Accuracy                     | 89.31       | 6.0 hr          | 18.0 hr         |
 | RTE   | Accuracy                     | 71.43       | 0.2 hr          | 0.2 hr          |
 | WNLI  | Accuracy                     | 43.66       | 0.2 hr          | 0.2 hr          |
 
