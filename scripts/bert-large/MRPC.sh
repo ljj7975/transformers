@@ -2,7 +2,7 @@
 #SBATCH --time=0-05:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=8G
+#SBATCH --mem=32G
 
 source ~/ENV/bin/activate
 

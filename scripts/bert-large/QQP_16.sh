@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --time=0-18:00:00
+#SBATCH --time=1-00:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=8G
+#SBATCH --mem=32G
 
 source ~/ENV/bin/activate
 
