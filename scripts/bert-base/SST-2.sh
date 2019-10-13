@@ -2,6 +2,7 @@
 #SBATCH --time=0-012:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
+#SBATCH --output=bert-base-SST-2-all.out
 #SBATCH --mem=64G
 
 source ~/ENV/bin/activate
