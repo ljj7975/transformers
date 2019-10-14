@@ -6,11 +6,9 @@
 #SBATCH --output=roberta-large-SST-2-20.out
 #SBATCH --mem=64G
 
- 
+conda activate brandon_bert
 
 TASK='SST-2'
 SEED=$1
 
 bash scripts/roberta-large/finetune.sh $TASK "FT" $SEED 23 22 21 20
-
-
