@@ -149,7 +149,6 @@ then
     do
         RESULT=$(cat $MM_OUTPUT_DIR/eval_results.txt | grep "^"$METRIC" =" | rev | cut -d" " -f1 | rev)
 
-        echo "RESULTS"
         echo $METRIC" = "$RESULT
 
         LOG_FILE=$MM_LOG_FILE_DIR/$LAYER_FOLDER_NAME-$METRIC.txt
