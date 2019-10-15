@@ -3,7 +3,7 @@
 #SBATCH --time=1-00:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
-#SBATCH --output=roberta-large-QQP-large.out
+#SBATCH --output=roberta-large-QQP-base.out
 #SBATCH --mem=64G
 
 conda activate brandon_bert
