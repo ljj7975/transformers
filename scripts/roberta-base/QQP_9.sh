@@ -6,11 +6,9 @@
 #SBATCH --output=roberta-base-QQP-9.out
 #SBATCH --mem=64G
 
- 
+conda activate brandon_bert
 
 TASK='QQP'
 SEED=$1
 
 bash scripts/roberta-base/finetune.sh $TASK "FT" $SEED 11 10 9
-
- 

@@ -6,11 +6,9 @@
 #SBATCH --output=roberta-base-MNLI-11.out
 #SBATCH --mem=64G
 
- 
+conda activate brandon_bert
 
 TASK='MNLI'
 SEED=$1
 
 bash scripts/roberta-base/finetune.sh $TASK "FT" $SEED 11
-
- 

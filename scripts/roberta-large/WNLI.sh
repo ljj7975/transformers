@@ -6,7 +6,7 @@
 #SBATCH --output=roberta-large-WNLI-all.out
 #SBATCH --mem=64G
 
- 
+conda activate brandon_bert
 
 TASK='WNLI'
 SEED=$1
@@ -40,5 +40,3 @@ bash scripts/roberta-large/finetune.sh $TASK "FT" $SEED 23 22 21 20 19 18 17 16 
 bash scripts/roberta-large/finetune.sh $TASK "FT" $SEED 23 22 21 20 19 18 17 16 15 14 13
 
 bash scripts/roberta-large/finetune.sh $TASK "FT" $SEED 23 22 21 20 19 18 17 16 15 14 13 12
-
-

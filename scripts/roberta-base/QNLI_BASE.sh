@@ -6,11 +6,9 @@
 #SBATCH --output=roberta-base-QNLI-base.out
 #SBATCH --mem=64G
 
- 
+conda activate brandon_bert
 
 TASK='QNLI'
 SEED=$1
 
 bash scripts/roberta-base/finetune.sh $TASK "BASE" $SEED
-
- 
