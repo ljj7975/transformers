@@ -18,7 +18,7 @@ else
 fi
 
 
-OUTPUT_DIR=models/bert-large/$TASK/$LAYER_FOLDER_NAME/$SEED
+OUTPUT_DIR=$SCRATCH_DIR/models/bert-large/$TASK/$LAYER_FOLDER_NAME/$SEED
 mkdir -p $OUTPUT_DIR
 
 LOG_FILE_DIR=logs/bert-large/$TASK/
@@ -49,7 +49,7 @@ then
 elif [ $TASK == "MNLI" ]
 then
     METRICS+=("acc")
-    MM_OUTPUT_DIR=models/bert-large/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
+    MM_OUTPUT_DIR=$SCRATCH_DIR/models/bert-large/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
     MM_LOG_FILE_DIR=logs/bert-large/$TASK-MM/
     mkdir -p $MM_OUTPUT_DIR
     mkdir -p $MM_LOG_FILE_DIR
@@ -156,7 +156,3 @@ then
         echo -e "$SEED\t$RESULT" >> $LOG_FILE
     done
 fi
-
-rm $OUTPUT_DIR/*.bin
-rm $OUTPUT_DIR/*.json
-rm $OUTPUT_DIR/vocab.txt

@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=def-jimmylin
-#SBATCH --time=0-04:00:00
+#SBATCH --time=0-06:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --output=roberta-large-SST-2-none.out
