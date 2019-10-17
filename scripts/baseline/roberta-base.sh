@@ -1,6 +1,5 @@
 TASK=$1
-EXP=$2
-SEED=$3
+SEED=$2
 
 OUTPUT_DIR=$SCRATCH_DIR/models/baseline/roberta-base/$TASK/$SEED
 mkdir -p $OUTPUT_DIR
@@ -9,7 +8,6 @@ LOG_FILE_DIR=logs/baseline/roberta-base/$TASK
 mkdir -p $LOG_FILE_DIR
 
 echo "TASK: "$TASK
-echo "EXP: "$EXP
 echo "SEED: "$SEED
 echo "OUTPUT_DIR: "$OUTPUT_DIR
 
@@ -56,6 +54,7 @@ for LR in "${LEARNING_RATES[@]}"
 do
     MODEL_DIR=$OUTPUT_DIR/$LR
 
+    echo "============="
     echo "LEARNING_RATE: "$LR
     echo "MODEL_DIR: "$MODEL_DIR
 
@@ -82,7 +81,7 @@ do
 
         echo $METRIC" = "$RESULT
 
-        LOG_FILE=$LOG_FILE_DIR/$LR_$METRIC.txt
+        LOG_FILE=$LOG_FILE_DIR/"${LR}_${METRIC}.txt"
         touch $LOG_FILE
         echo -e "$SEED\t$RESULT" >> $LOG_FILE
 
@@ -91,7 +90,7 @@ do
             RESULT=$(cat $MM_OUTPUT_DIR/$LR/eval_results.txt | grep "^"$METRIC" =" | rev | cut -d" " -f1 | rev)
             echo "MM :"$METRIC" = "$RESULT
 
-            LOG_FILE=$MM_LOG_FILE_DIR/$LR_$METRIC.txt
+            LOG_FILE=$MM_LOG_FILE_DIR/"${LR}_${METRIC}.txt"
             touch $LOG_FILE
             echo -e "$SEED\t$RESULT" >> $LOG_FILE
         fi
