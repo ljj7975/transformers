@@ -82,7 +82,7 @@ then
       --max_seq_length 128 \
       --per_gpu_train_batch_size 8 \
       --learning_rate 2e-5 \
-      --num_train_epochs 3.0 \
+      --num_train_epochs 10.0 \
       --save_steps 0 \
       --seed $SEED \
       --output_dir $OUTPUT_DIR \
@@ -100,7 +100,7 @@ then
       --max_seq_length 128 \
       --per_gpu_train_batch_size 8 \
       --learning_rate 2e-5 \
-      --num_train_epochs 3.0 \
+      --num_train_epochs 10.0 \
       --save_steps 0 \
       --seed $SEED \
       --layers_to_fine_tune $LAYERS_TO_FINE_TUNE \
@@ -119,7 +119,7 @@ then
       --max_seq_length 128 \
       --per_gpu_train_batch_size 8 \
       --learning_rate 2e-5 \
-      --num_train_epochs 3.0 \
+      --num_train_epochs 10.0 \
       --save_steps 0 \
       --seed $SEED \
       --only_classifier \
