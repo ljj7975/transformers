@@ -1,6 +1,6 @@
 TASK=$1
 SEED=$2
-SEED=$3
+LR=$3
 
 OUTPUT_DIR=$SCRATCH_DIR/models/baseline/roberta-large/$TASK/$SEED
 mkdir -p $OUTPUT_DIR
