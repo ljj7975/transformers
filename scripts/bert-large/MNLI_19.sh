@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=0-18:00:00
+#SBATCH --time=1-00:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --output=bert-large-MNLI-19.out
