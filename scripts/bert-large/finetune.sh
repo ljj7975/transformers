@@ -5,7 +5,7 @@ LAYERS_TO_FINE_TUNE="${@:4}"
 
 if [ $EXP == "BASE" ] # no fine tuning
 then
-    LAYER_FOLDER_NAME="large"
+    LAYER_FOLDER_NAME="base"
 elif [ $EXP == "FT" ] # fine tune given layers
 then
     LAYER_FOLDER_NAME=${LAYERS_TO_FINE_TUNE// /_}
