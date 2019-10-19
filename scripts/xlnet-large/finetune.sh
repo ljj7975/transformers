@@ -18,10 +18,10 @@ else
 fi
 
 
-OUTPUT_DIR=$SCRATCH_DIR/models/roberta-base/$TASK/$LAYER_FOLDER_NAME/$SEED
+OUTPUT_DIR=$SCRATCH_DIR/models/xlnet-large/$TASK/$LAYER_FOLDER_NAME/$SEED
 mkdir -p $OUTPUT_DIR
 
-LOG_FILE_DIR=logs/roberta-base/$TASK/
+LOG_FILE_DIR=logs/xlnet-large/$TASK/
 mkdir -p $LOG_FILE_DIR
 
 echo "TASK: "$TASK
@@ -49,8 +49,8 @@ then
 elif [ $TASK == "MNLI" ]
 then
     METRICS+=("acc")
-    MM_OUTPUT_DIR=$SCRATCH_DIR/models/roberta-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
-    MM_LOG_FILE_DIR=logs/roberta-base/$TASK-MM/
+    MM_OUTPUT_DIR=$SCRATCH_DIR/models/xlnet-large/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
+    MM_LOG_FILE_DIR=logs/xlnet-large/$TASK-MM/
     mkdir -p $MM_OUTPUT_DIR
     mkdir -p $MM_LOG_FILE_DIR
 elif [ $TASK == "QNLI" ]
@@ -72,17 +72,16 @@ fi
 if [ $EXP == "BASE" ] # no fine tuning
 then
     python examples/run_glue.py \
-      --model_type roberta \
-      --model_name_or_path $TRAINED_MODEL_DIR/roberta-base \
+      --model_type xlnet \
+      --model_name_or_path $TRAINED_MODEL_DIR/xlnet-large-cased \
       --task_name $TASK \
       --do_train \
       --do_eval \
-      --do_lower_case \
       --data_dir $DATA_DIR/glue/$TASK/ \
       --max_seq_length 128 \
       --per_gpu_train_batch_size 16 \
       --learning_rate 2e-5 \
-      --num_train_epochs 10.0 \
+      --max_steps 10000 \
       --save_steps 0 \
       --seed $SEED \
       --output_dir $OUTPUT_DIR \
@@ -90,17 +89,16 @@ then
 elif [ $EXP == "FT" ] # fine tune given layers
 then
     python examples/run_glue.py \
-      --model_type roberta \
-      --model_name_or_path $TRAINED_MODEL_DIR/roberta-base \
+      --model_type xlnet \
+      --model_name_or_path $TRAINED_MODEL_DIR/xlnet-large-cased \
       --task_name $TASK \
       --do_train \
       --do_eval \
-      --do_lower_case \
       --data_dir $DATA_DIR/glue/$TASK/ \
       --max_seq_length 128 \
       --per_gpu_train_batch_size 16 \
       --learning_rate 2e-5 \
-      --num_train_epochs 10.0 \
+      --max_steps 10000 \
       --save_steps 0 \
       --seed $SEED \
       --layers_to_fine_tune $LAYERS_TO_FINE_TUNE \
@@ -109,17 +107,16 @@ then
 elif [ $EXP == "NONE" ] # No layers to fine tune (only classifier)
 then
     python examples/run_glue.py \
-      --model_type roberta \
-      --model_name_or_path $TRAINED_MODEL_DIR/roberta-base \
+      --model_type xlnet \
+      --model_name_or_path $TRAINED_MODEL_DIR/xlnet-large-cased \
       --task_name $TASK \
       --do_train \
       --do_eval \
-      --do_lower_case \
       --data_dir $DATA_DIR/glue/$TASK/ \
       --max_seq_length 128 \
       --per_gpu_train_batch_size 16 \
       --learning_rate 2e-5 \
-      --num_train_epochs 10.0 \
+      --max_steps 10000 \
       --save_steps 0 \
       --seed $SEED \
       --only_classifier \

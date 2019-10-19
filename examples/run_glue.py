@@ -103,13 +103,17 @@ def train(args, train_dataset, model, tokenizer):
 
     parameters = model.named_parameters()
 
+    # print("before")
+    # for name, params in parameters:
+    #     print(name, params.size())
+
     if args.only_classifier or args.layers_to_fine_tune:
         parameters = []
         for name, params in model.named_parameters():
             if args.model_type == 'bert' or args.model_type == 'roberta':
                 if 'encoder' in name:
                     for layer in args.layers_to_fine_tune:
-                        if f"layer.{layer}" in name:
+                        if f"layer.{layer}." in name:
                             parameters.append((name, params))
                             break
                 elif 'embeddings' in name:
@@ -117,6 +121,16 @@ def train(args, train_dataset, model, tokenizer):
                 else:
                     parameters.append((name, params))
 
+            elif args.model_type == 'xlnet':
+                if 'transformer' in name:
+                    for layer in args.layers_to_fine_tune:
+                        if f"layer.{layer}." in name:
+                            parameters.append((name, params))
+                            break
+                else:
+                    parameters.append((name, params))
+
+    # print("after")
     # for name, params in parameters:
     #     print(name, params.size())
 
