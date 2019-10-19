@@ -11,6 +11,6 @@ source ~/ENV/bin/activate
 TASK='SST-2'
 SEED=$1
 
-bash scripts/baseline/bert-base.sh $TASK $SEED 5e-5
+bash scripts/glue_scripts/baseline/bert-base.sh $TASK $SEED 5e-5
 
 deactivate

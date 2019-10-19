@@ -1,0 +1,326 @@
+import argparse
+import os
+import shutil
+
+
+
+TASKS=["CoLA", "SST-2", "MRPC", "STS-B", "QQP", "MNLI", "QNLI", "RTE", "WNLI"]
+
+
+time_limit = {
+    "bert-base":{
+            "CoLA" : "0-01:00:00",
+            "SST-2" : "0-03:00:00",
+            "MRPC" : "0-01:00:00",
+            "STS-B" : "0-01:00:00",
+            "QQP" : "0-08:00:00",
+            "MNLI" : "0-08:00:00",
+            "QNLI" : "0-08:00:00",
+            "RTE" : "0-01:00:00",
+            "WNLI" : "0-01:00:00"
+        },
+    "bert-large":{
+            "CoLA" : "0-01:00:00",
+            "SST-2" : "0-06:00:00",
+            "MRPC" : "0-01:00:00",
+            "STS-B" : "0-01:00:00",
+            "QQP" : "1-00:00:00",
+            "MNLI" : "1-00:00:00",
+            "QNLI" : "1-00:00:00",
+            "RTE" : "0-01:00:00",
+            "WNLI" : "0-01:00:00"
+        },
+    "roberta-base":{
+            "CoLA" : "0-02:00:00",
+            "SST-2" : "0-10:00:00",
+            "MRPC" : "0-02:00:00",
+            "STS-B" : "0-04:00:00",
+            "QQP" : "1-00:00:00",
+            "MNLI" : "1-00:00:00",
+            "QNLI" : "1-00:00:00",
+            "RTE" : "0-01:00:00",
+            "WNLI" : "0-02:00:00"
+        },
+    "roberta-large":{
+            "CoLA" : "0-02:00:00",
+            "SST-2" : "1-00:00:00",
+            "MRPC" : "0-02:00:00",
+            "STS-B" : "0-04:00:00",
+            "QQP" : "4-00:00:00",
+            "MNLI" : "4-00:00:00",
+            "QNLI" : "4-00:00:00",
+            "RTE" : "0-02:00:00",
+            "WNLI" : "0-02:00:00"
+        },
+    "xlnet-base":{
+            "CoLA" : "0-02:00:00",
+            "SST-2" : "0-12:00:00",
+            "MRPC" : "0-01:00:00",
+            "STS-B" : "0-02:00:00",
+            "QQP" : "3-00:00:00",
+            "MNLI" : "3-00:00:00",
+            "QNLI" : "0-20:00:00",
+            "RTE" : "0-01:00:00",
+            "WNLI" : "0-01:00:00"
+        },
+    "xlnet-large":{
+            "CoLA" : "0-00:00:00",
+            "SST-2" : "0-00:00:00",
+            "MRPC" : "0-00:00:00",
+            "STS-B" : "0-00:00:00",
+            "QQP" : "0-00:00:00",
+            "MNLI" : "0-00:00:00",
+            "QNLI" : "0-00:00:00",
+            "RTE" : "0-00:00:00",
+            "WNLI" : "0-00:00:00"
+        }
+}
+
+learning_rate = {
+    "bert-base":{
+            "CoLA" : "1",
+            "SST-2" : "1",
+            "MRPC" : "1",
+            "STS-B" : "1",
+            "QQP" : "1",
+            "MNLI" : "1",
+            "QNLI" : "1",
+            "RTE" : "1",
+            "WNLI" : "1"
+        },
+    "bert-large":{
+            "CoLA" : "1",
+            "SST-2" : "1",
+            "MRPC" : "1",
+            "STS-B" : "1",
+            "QQP" : "1",
+            "MNLI" : "1",
+            "QNLI" : "1",
+            "RTE" : "1",
+            "WNLI" : "1"
+        },
+    "roberta-base":{
+            "CoLA" : "1",
+            "SST-2" : "1",
+            "MRPC" : "1",
+            "STS-B" : "1",
+            "QQP" : "1",
+            "MNLI" : "1",
+            "QNLI" : "1",
+            "RTE" : "1",
+            "WNLI" : "1"
+        },
+    "roberta-large":{
+            "CoLA" : "1",
+            "SST-2" : "1",
+            "MRPC" : "1",
+            "STS-B" : "1",
+            "QQP" : "1",
+            "MNLI" : "1",
+            "QNLI" : "1",
+            "RTE" : "1",
+            "WNLI" : "1"
+        },
+    "xlnet-base":{
+            "CoLA" : "1",
+            "SST-2" : "1",
+            "MRPC" : "1",
+            "STS-B" : "1",
+            "QQP" : "1",
+            "MNLI" : "1",
+            "QNLI" : "1",
+            "RTE" : "1",
+            "WNLI" : "1"
+        },
+    "xlnet-large":{
+            "CoLA" : "1",
+            "SST-2" : "1",
+            "MRPC" : "1",
+            "STS-B" : "1",
+            "QQP" : "1",
+            "MNLI" : "1",
+            "QNLI" : "1",
+            "RTE" : "1",
+            "WNLI" : "1"
+        }
+}
+
+
+def generate_dir(dir_path):
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
+
+def generate_base_script(model):
+
+    print(model, "baseline")
+
+    baseline_dir = "baseline"
+    generate_dir(baseline_dir)
+    
+    model_dir = f"{baseline_dir}/{model}"
+
+    if os.path.exists(model_dir):
+        shutil.rmtree(model_dir)
+
+    generate_dir(model_dir)
+
+    for task in TASKS:
+        for lr in range(1,6):
+            lines = [
+                "#!/bin/bash\n",
+                "#SBATCH --account=def-jimmylin\n",
+                f"#SBATCH --time={time_limit[model][task]}\n",
+                "#SBATCH --gres=gpu:1\n",
+                "#SBATCH --cpus-per-task=8\n",
+                f"#SBATCH --output=baseline-{model}-{task}_{lr}.out\n",
+                "#SBATCH --mem=64G\n",
+                "\n",
+                "source ~/ENV/bin/activate\n",
+                "\n",
+                f"TASK=\'{task}\'\n",
+                "SEED=$1\n",
+                "\n",
+                f"bash scripts/glue_scripts/baseline/{model}.sh $TASK $SEED {lr}e-5\n",
+                "\n",
+                "deactivate\n"
+            ]
+
+            file_name = f"{model_dir}/{task}_{lr}.sh"
+            file = open(file_name, "w")
+
+            file.writelines(lines)
+
+
+def generate_finetune_script(model):
+
+    print(model, "finetune")
+
+    baseline_dir = "finetune"
+    generate_dir(baseline_dir)
+
+    model_dir = f"{baseline_dir}/{model}"
+
+    if os.path.exists(model_dir):
+        shutil.rmtree(model_dir)
+
+    generate_dir(model_dir)
+
+    if "base" in model:
+        layers = list(range(6, 12))
+    else:
+        layers = list(range(12, 24))
+
+    # layers += ["NONE", "BASE"]
+
+    for task in TASKS:
+        layer_str = ""
+        for layer in reversed(layers):
+            layer_str = layer_str + f" {layer}"
+
+            lines = [
+                "#!/bin/bash\n",
+                "#SBATCH --account=def-jimmylin\n",
+                f"#SBATCH --time={time_limit[model][task]}\n",
+                "#SBATCH --gres=gpu:1\n",
+                "#SBATCH --cpus-per-task=8\n",
+                f"#SBATCH --output={model}-{task}_{layer}.out\n",
+                "#SBATCH --mem=64G\n",
+                "\n",
+                "source ~/ENV/bin/activate\n",
+                "\n",
+                f"TASK=\'{task}\'\n",
+                "SEED=$1\n",
+                "\n",
+                f"bash scripts/glue_scripts/finetune/{model}.sh $TASK \'FT\' $SEED {learning_rate[model][task]}e-5{layer_str}\n",
+                "\n",
+                "deactivate\n"
+            ]
+
+            file_name = f"{model_dir}/{task}_{layer}.sh"
+            file = open(file_name, "w")
+
+            file.writelines(lines)
+
+        # -- base -- 
+
+
+        layer_str = layer_str + f" BASE"
+
+        lines = [
+            "#!/bin/bash\n",
+            "#SBATCH --account=def-jimmylin\n",
+            f"#SBATCH --time={time_limit[model][task]}\n",
+            "#SBATCH --gres=gpu:1\n",
+            "#SBATCH --cpus-per-task=8\n",
+            f"#SBATCH --output={model}-{task}_BASE.out\n",
+            "#SBATCH --mem=64G\n",
+            "\n",
+            "source ~/ENV/bin/activate\n",
+            "\n",
+            f"TASK=\'{task}\'\n",
+            "SEED=$1\n",
+            "\n",
+            f"bash scripts/glue_scripts/finetune/{model}.sh \'BASE\' $SEED {learning_rate[model][task]}e-5 \n",
+            "\n",
+            "deactivate\n"
+        ]
+
+        file_name = f"{model_dir}/{task}_BASE.sh"
+        file = open(file_name, "w")
+
+        file.writelines(lines)
+
+
+        # -- none -- 
+
+
+        layer_str = layer_str + f" NONE"
+
+        lines = [
+            "#!/bin/bash\n",
+            "#SBATCH --account=def-jimmylin\n",
+            f"#SBATCH --time={time_limit[model][task]}\n",
+            "#SBATCH --gres=gpu:1\n",
+            "#SBATCH --cpus-per-task=8\n",
+            f"#SBATCH --output={model}-{task}_NONE.out\n",
+            "#SBATCH --mem=64G\n",
+            "\n",
+            "source ~/ENV/bin/activate\n",
+            "\n",
+            f"TASK=\'{task}\'\n",
+            "SEED=$1\n",
+            "\n",
+            f"bash scripts/glue_scripts/finetune/{model}.sh \'NONE\' $SEED {learning_rate[model][task]}e-5 \n",
+            "\n",
+            "deactivate\n"
+        ]
+
+        file_name = f"{model_dir}/{task}_NONE.sh"
+        file = open(file_name, "w")
+
+        file.writelines(lines)
+
+
+
+def main():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--model', '-m', type=str, default='all', choices=['all', 'bert-base', 'bert-large', 'roberta-base', 'roberta-large', 'xlnet-base', 'xlnet-large'])
+
+    parser.add_argument("--baseline", action='store_true', help="Whether to run training.")
+
+    args = parser.parse_args()
+
+    models = ['bert-base', 'bert-large', 'roberta-base', 'roberta-large', 'xlnet-base', 'xlnet-large']
+    if args.model != "all":
+        models = [args.model]
+
+    for model in models:
+        if args.baseline:
+            generate_base_script(model)
+        else:
+            generate_finetune_script(model)
+
+if __name__ == "__main__":
+    main()

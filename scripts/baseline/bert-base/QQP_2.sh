@@ -11,6 +11,6 @@ source ~/ENV/bin/activate
 TASK='QQP'
 SEED=$1
 
-bash scripts/baseline/bert-base.sh $TASK $SEED 2e-5
+bash scripts/glue_scripts/baseline/bert-base.sh $TASK $SEED 2e-5
 
 deactivate

@@ -11,6 +11,6 @@ source ~/ENV/bin/activate
 TASK='MNLI'
 SEED=$1
 
-bash scripts/baseline/roberta-large.sh $TASK $SEED 2e-5
+bash scripts/glue_scripts/baseline/roberta-large.sh $TASK $SEED 2e-5
 
 deactivate

@@ -11,6 +11,6 @@ source ~/ENV/bin/activate
 TASK='SST-2'
 SEED=$1
 
-bash scripts/baseline/bert-large.sh $TASK $SEED 1e-5
+bash scripts/glue_scripts/baseline/bert-large.sh $TASK $SEED 1e-5
 
 deactivate

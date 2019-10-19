@@ -101,17 +101,17 @@ uncased  BERT base model (the checkpoint `bert-base-uncased`). All experiments r
 batch size of 24. Some of these tasks have a small dataset and training can lead to high variance in the results
 between different runs. We report the median on 5 runs (with different seeds) for each of the metrics.
 
-| Task  | Metric                       | Result      | Bert-base       | Bert-large      |
-|-------|------------------------------|-------------|-----------------|-----------------|
-| CoLA  | Matthew's corr               | 48.87       | 0.5 hr          | 0.5 hr          |
-| SST-2 | Accuracy                     | 91.74       | 1.5 hr          | 4.0 hr          |
-| MRPC  | F1/Accuracy                  | 90.70/86.27 | 0.2 hr          | 0.2 hr          |
-| STS-B | Person/Spearman corr.        | 91.39/91.04 | 0.5 hr          | 0.5 hr          |
-| QQP   | Accuracy/F1                  | 90.79/87.66 | 6.0 hr          | 18.0 hr         |
-| MNLI  | Matched acc./Mismatched acc. | 83.70/84.83 | 6.0 hr          | 18.0 hr         |
-| QNLI  | Accuracy                     | 89.31       | 6.0 hr          | 18.0 hr         |
-| RTE   | Accuracy                     | 71.43       | 0.2 hr          | 0.2 hr          |
-| WNLI  | Accuracy                     | 43.66       | 0.2 hr          | 0.2 hr          |
+| Task  | Metric                       | Result      | Bert-base (x3) | Bert-large (x3) | xlnet-base      | xlnet-large      |
+|-------|------------------------------|-------------|----------------|-----------------|-----------------|------------------|
+| CoLA  | Matthew's corr               | 48.87       | 0.5 hr         | 0.5 hr          | 1.5 hr          |
+| SST-2 | Accuracy                     | 91.74       | 0.5 hr         | 1.5 hr          | 12.0 hr         |
+| MRPC  | F1/Accuracy                  | 90.70/86.27 | 0.5 hr         | 0.5 hr          | 1.0 hr          |
+| STS-B | Person/Spearman corr.        | 91.39/91.04 | 0.5 hr         | 0.5 hr          | 1.5 hr          |
+| QQP   | Accuracy/F1                  | 90.79/87.66 | 2.0 hr         | 6.0 hr          | 60.0 hr         |
+| MNLI  | Matched acc./Mismatched acc. | 83.70/84.83 | 2.0 hr         | 6.0 hr          | 70.0 hr         |
+| QNLI  | Accuracy                     | 89.31       | 2.0 hr         | 6.0 hr          | 20.0 hr         |
+| RTE   | Accuracy                     | 71.43       | 0.2 hr         | 0.2 hr          | 0.5 hr          |
+| WNLI  | Accuracy                     | 43.66       | 0.2 hr         | 0.2 hr          | 0.2 hr          |
 
 Some of these results are significantly different from the ones reported on the test set
 of GLUE benchmark on the website. For QQP and WNLI, please refer to [FAQ #12](https://gluebenchmark.com/faq) on the webite.

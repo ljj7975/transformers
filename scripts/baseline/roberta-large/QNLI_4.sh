@@ -11,6 +11,6 @@ source ~/ENV/bin/activate
 TASK='QNLI'
 SEED=$1
 
-bash scripts/baseline/roberta-large.sh $TASK $SEED 4e-5
+bash scripts/glue_scripts/baseline/roberta-large.sh $TASK $SEED 4e-5
 
 deactivate
