@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=def-jimmylin
-#SBATCH --time=0-02:00:00
+#SBATCH --time=0-01:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --output=baseline-xlnet-base-STS-B_2.out
