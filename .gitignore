@@ -5,6 +5,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.out
+scripts/baseline
+scripts/finetune
 
 # C extensions
 *.so
