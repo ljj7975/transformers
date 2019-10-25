@@ -83,7 +83,7 @@ then
       --data_dir $DATA_DIR/glue/$TASK/ \
       --max_seq_length 128 \
       --per_gpu_train_batch_size 16 \
-      --learning_rate ${LR}e-5 \
+      --learning_rate ${LR} \
       --num_train_epochs 10.0 \
       --save_steps 0 \
       --seed $SEED \
@@ -101,7 +101,7 @@ then
       --data_dir $DATA_DIR/glue/$TASK/ \
       --max_seq_length 128 \
       --per_gpu_train_batch_size 16 \
-      --learning_rate ${LR}e-5 \
+      --learning_rate ${LR} \
       --num_train_epochs 10.0 \
       --save_steps 0 \
       --seed $SEED \
@@ -120,7 +120,7 @@ then
       --data_dir $DATA_DIR/glue/$TASK/ \
       --max_seq_length 128 \
       --per_gpu_train_batch_size 16 \
-      --learning_rate ${LR}e-5 \
+      --learning_rate ${LR} \
       --num_train_epochs 10.0 \
       --save_steps 0 \
       --seed $SEED \
