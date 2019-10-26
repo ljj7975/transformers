@@ -78,15 +78,15 @@ time_limit = {
 
 learning_rate = {
     "bert-base":{
-            "CoLA" : "1",
-            "SST-2" : "1",
-            "MRPC" : "1",
-            "STS-B" : "1",
-            "QQP" : "1",
-            "MNLI" : "1",
-            "QNLI" : "1",
-            "RTE" : "1",
-            "WNLI" : "1"
+            "CoLA" : "4",
+            "SST-2" : "2",
+            "MRPC" : "3",
+            "STS-B" : "5",
+            "QQP" : "2",
+            "MNLI" : "2",
+            "QNLI" : "2",
+            "RTE" : "3",
+            "WNLI" : "3"
         },
     "bert-large":{
             "CoLA" : "2",
@@ -157,7 +157,7 @@ def generate_base_script(model):
 
     baseline_dir = "baseline"
     generate_dir(baseline_dir)
-    
+
     model_dir = f"{baseline_dir}/{model}"
 
     if os.path.exists(model_dir):
@@ -242,7 +242,7 @@ def generate_finetune_script(model):
 
             file.writelines(lines)
 
-        # -- base -- 
+        # -- base --
 
 
         layer_str = layer_str + f" BASE"
@@ -272,7 +272,7 @@ def generate_finetune_script(model):
         file.writelines(lines)
 
 
-        # -- none -- 
+        # -- none --
 
 
         layer_str = layer_str + f" NONE"
