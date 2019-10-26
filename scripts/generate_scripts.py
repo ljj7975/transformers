@@ -133,15 +133,15 @@ learning_rate = {
             "WNLI" : "5"
         },
     "xlnet-large":{
-            "CoLA" : "1",
+            "CoLA" : "2",
             "SST-2" : "1",
             "MRPC" : "1",
-            "STS-B" : "1",
-            "QQP" : "1",
-            "MNLI" : "1",
-            "QNLI" : "1",
+            "STS-B" : "2",
+            "QQP" : "3",
+            "MNLI" : "2",
+            "QNLI" : "2",
             "RTE" : "1",
-            "WNLI" : "1"
+            "WNLI" : "5"
         }
 }
 
