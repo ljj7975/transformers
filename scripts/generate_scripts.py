@@ -261,7 +261,7 @@ def generate_finetune_script(model):
             f"TASK=\'{task}\'\n",
             "SEED=$1\n",
             "\n",
-            f"bash scripts/glue_scripts/finetune/{model}.sh \'BASE\' $SEED {learning_rate[model][task]}e-5 \n",
+            f"bash scripts/glue_scripts/finetune/{model}.sh $TASK \'BASE\' $SEED {learning_rate[model][task]}e-5 \n",
             "\n",
             "deactivate\n"
         ]
@@ -291,7 +291,7 @@ def generate_finetune_script(model):
             f"TASK=\'{task}\'\n",
             "SEED=$1\n",
             "\n",
-            f"bash scripts/glue_scripts/finetune/{model}.sh \'NONE\' $SEED {learning_rate[model][task]}e-5 \n",
+            f"bash scripts/glue_scripts/finetune/{model}.sh $TASK \'NONE\' $SEED {learning_rate[model][task]}e-5 \n",
             "\n",
             "deactivate\n"
         ]
