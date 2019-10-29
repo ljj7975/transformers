@@ -100,15 +100,15 @@ learning_rate = {
             "WNLI" : "2"
         },
     "roberta-base":{
-            "CoLA" : "1",
+            "CoLA" : "4",
             "SST-2" : "1",
-            "MRPC" : "1",
-            "STS-B" : "1",
+            "MRPC" : "2",
+            "STS-B" : "2",
             "QQP" : "1",
             "MNLI" : "1",
             "QNLI" : "1",
-            "RTE" : "1",
-            "WNLI" : "1"
+            "RTE" : "3",
+            "WNLI" : "5"
         },
     "roberta-large":{
             "CoLA" : "1",
