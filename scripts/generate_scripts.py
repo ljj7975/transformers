@@ -370,7 +370,7 @@ def generate_finetune_script(model):
 
 
 def main():
-    global lis
+    global time_limit
 
     parser = argparse.ArgumentParser()
 
@@ -383,6 +383,7 @@ def main():
     args = parser.parse_args()
 
     if args.beluga:
+        print("for beluga")
         time_limit=beluga_time_limit
     else:
         time_limit=extended_time_limit
