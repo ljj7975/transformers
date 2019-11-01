@@ -2,12 +2,11 @@ import argparse
 import os
 import shutil
 
+TASKS=["CoLA", "SST-2", "MRPC", "STS-B", "QQP", "MNLI", "QNLI", "RTE"]
 
+time_limit = None
 
-TASKS=["CoLA", "SST-2", "MRPC", "STS-B", "QQP", "MNLI", "QNLI", "RTE", "WNLI"]
-
-
-time_limit = {
+beluga_time_limit = {
     "bert-base":{
             "CoLA" : "0-01:00:00",
             "SST-2" : "0-03:00:00",
@@ -25,7 +24,7 @@ time_limit = {
             "MRPC" : "0-01:00:00",
             "STS-B" : "0-01:00:00",
             "QQP" : "1-06:00:00",
-            "MNLI" : "1-06:00:00",
+            "MNLI" : "2-00:00:00",
             "QNLI" : "1-00:00:00",
             "RTE" : "0-01:00:00",
             "WNLI" : "0-01:00:00"
@@ -42,15 +41,15 @@ time_limit = {
             "WNLI" : "0-02:00:00"
         },
     "roberta-large":{
-            "CoLA" : "0-02:00:00",
+            "CoLA" : "0-03:00:00",
             "SST-2" : "1-00:00:00",
-            "MRPC" : "0-02:00:00",
-            "STS-B" : "0-04:00:00",
+            "MRPC" : "0-03:00:00",
+            "STS-B" : "0-06:00:00",
             "QQP" : "4-00:00:00",
             "MNLI" : "4-00:00:00",
             "QNLI" : "4-00:00:00",
-            "RTE" : "0-02:00:00",
-            "WNLI" : "0-02:00:00"
+            "RTE" : "0-03:00:00",
+            "WNLI" : "0-03:00:00"
         },
     "xlnet-base":{
             "CoLA" : "0-03:00:00",
@@ -64,15 +63,84 @@ time_limit = {
             "WNLI" : "0-02:00:00"
         },
     "xlnet-large":{
-            "CoLA" : "0-03:00:00",
+            "CoLA" : "0-06:00:00",
             "SST-2" : "0-06:00:00",
             "MRPC" : "0-05:00:00",
             "STS-B" : "0-04:00:00",
             "QQP" : "1-00:00:00",
             "MNLI" : "1-00:00:00",
             "QNLI" : "1-00:00:00",
-            "RTE" : "0-05:00:00",
+            "RTE" : "0-07:00:00",
             "WNLI" : "0-04:00:00"
+        }
+}
+
+extended_time_limit = {
+    "bert-base":{
+            "CoLA" : "0-02:00:00",
+            "SST-2" : "0-06:00:00",
+            "MRPC" : "0-02:00:00",
+            "STS-B" : "0-02:00:00",
+            "QQP" : "2-12:00:00",
+            "MNLI" : "2-12:00:00",
+            "QNLI" : "2-00:00:00",
+            "RTE" : "0-02:00:00",
+            "WNLI" : "0-02:00:00"
+        },
+    "bert-large":{
+            "CoLA" : "0-02:00:00",
+            "SST-2" : "0-12:00:00",
+            "MRPC" : "0-02:00:00",
+            "STS-B" : "0-02:00:00",
+            "QQP" : "2-12:00:00",
+            "MNLI" : "4-00:00:00",
+            "QNLI" : "2-00:00:00",
+            "RTE" : "0-02:00:00",
+            "WNLI" : "0-02:00:00"
+        },
+    "roberta-base":{
+            "CoLA" : "0-04:00:00",
+            "SST-2" : "0-20:00:00",
+            "MRPC" : "0-04:00:00",
+            "STS-B" : "0-08:00:00",
+            "QQP" : "2-00:00:00",
+            "MNLI" : "2-00:00:00",
+            "QNLI" : "2-00:00:00",
+            "RTE" : "0-02:00:00",
+            "WNLI" : "0-04:00:00"
+        },
+    "roberta-large":{
+            "CoLA" : "0-06:00:00",
+            "SST-2" : "2-00:00:00",
+            "MRPC" : "0-06:00:00",
+            "STS-B" : "0-10:00:00",
+            "QQP" : "8-00:00:00",
+            "MNLI" : "8-00:00:00",
+            "QNLI" : "8-00:00:00",
+            "RTE" : "0-06:00:00",
+            "WNLI" : "0-06:00:00"
+        },
+    "xlnet-base":{
+            "CoLA" : "0-06:00:00",
+            "SST-2" : "0-12:00:00",
+            "MRPC" : "0-04:00:00",
+            "STS-B" : "0-04:00:00",
+            "QQP" : "0-20:00:00",
+            "MNLI" : "0-20:00:00",
+            "QNLI" : "0-20:00:00",
+            "RTE" : "0-06:00:00",
+            "WNLI" : "0-04:00:00"
+        },
+    "xlnet-large":{
+            "CoLA" : "0-12:00:00",
+            "SST-2" : "0-12:00:00",
+            "MRPC" : "0-10:00:00",
+            "STS-B" : "0-08:00:00",
+            "QQP" : "2-00:00:00",
+            "MNLI" : "2-00:00:00",
+            "QNLI" : "2-00:00:00",
+            "RTE" : "0-14:00:00",
+            "WNLI" : "0-08:00:00"
         }
 }
 
@@ -124,22 +192,22 @@ learning_rate = {
     "xlnet-base":{
             "CoLA" : "2",
             "SST-2" : "1",
-            "MRPC" : "2",
-            "STS-B" : "4",
-            "QQP" : "1",
-            "MNLI" : "1",
-            "QNLI" : "2",
-            "RTE" : "3",
-            "WNLI" : "5"
-        },
-    "xlnet-large":{
-            "CoLA" : "2",
-            "SST-2" : "1",
             "MRPC" : "1",
             "STS-B" : "2",
             "QQP" : "3",
             "MNLI" : "2",
             "QNLI" : "2",
+            "RTE" : "1",
+            "WNLI" : "5"
+        },
+    "xlnet-large":{
+            "CoLA" : "1",
+            "SST-2" : "1",
+            "MRPC" : "1",
+            "STS-B" : "2",
+            "QQP" : "1",
+            "MNLI" : "1",
+            "QNLI" : "1",
             "RTE" : "1",
             "WNLI" : "5"
         }
@@ -210,8 +278,6 @@ def generate_finetune_script(model):
         layers = list(range(6, 12))
     else:
         layers = list(range(12, 24))
-
-    # layers += ["NONE", "BASE"]
 
     for task in TASKS:
         layer_str = ""
@@ -304,13 +370,22 @@ def generate_finetune_script(model):
 
 
 def main():
+    global lis
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--model', '-m', type=str, default='all', choices=['all', 'bert-base', 'bert-large', 'roberta-base', 'roberta-large', 'xlnet-base', 'xlnet-large'])
 
     parser.add_argument("--baseline", action='store_true', help="Whether to run training.")
 
+    parser.add_argument("--beluga", action='store_true', help="Whether it is for beluga or not.")
+
     args = parser.parse_args()
+
+    if args.beluga:
+        time_limit=beluga_time_limit
+    else:
+        time_limit=extended_time_limit
 
     models = ['bert-base', 'bert-large', 'roberta-base', 'roberta-large', 'xlnet-base', 'xlnet-large']
     if args.model != "all":
