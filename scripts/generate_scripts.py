@@ -151,7 +151,7 @@ learning_rate = {
             "MRPC" : "3",
             "STS-B" : "5",
             "QQP" : "2",
-            "MNLI" : "2",
+            "MNLI" : "3",
             "QNLI" : "2",
             "RTE" : "3",
             "WNLI" : "3"
