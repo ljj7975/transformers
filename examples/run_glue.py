@@ -58,7 +58,7 @@ from transformers import glue_convert_examples_to_features as convert_examples_t
 
 logger = logging.getLogger(__name__)
 
-ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (BertConfig, XLNetConfig, XLMConfig, 
+ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (BertConfig, XLNetConfig, XLMConfig,
                                                                                 RobertaConfig, DistilBertConfig)), ())
 
 MODEL_CLASSES = {
@@ -103,9 +103,46 @@ def train(args, train_dataset, model, tokenizer):
 
     parameters = model.named_parameters()
 
-    # print("before")
-    # for name, params in parameters:
-    #     print(name, params.size())
+    param_maps = {
+        "embeddings":0,
+        "attention.self":0,
+        "attention.output":0,
+        "intermediate.dense":0,
+        "output.dense":0,
+        "output.LayerNorm":0,
+        "pooler":0,
+        "classifier":0
+    }
+
+    total_param = 0
+
+    for name, params in parameters:
+        param_size = params.size()
+        param_aggregated = 1
+        for size in param_size:
+            param_aggregated = param_aggregated * size
+
+        total_param = total_param + param_aggregated
+
+        flag = True
+        for key in param_maps.keys():
+            if key in name:
+                print(key, name)
+                flag=False
+                param_maps[key] = param_maps[key] + param_aggregated
+                break
+        if flag:
+            print("failed to count layers", name)
+
+    param_maps["output"] = param_maps["output.dense"] + param_maps["output.LayerNorm"]
+
+    del param_maps["output.dense"]
+    del param_maps["output.LayerNorm"]
+
+    for key, val in param_maps.items():
+        print(key, '\n\t', val, '\t', round(val/1000000,1), '\t', round(100*val/total_param,1))
+
+    print("total", round(total_param/1000000,1))
 
     if args.only_classifier or args.layers_to_fine_tune:
         parameters = []
@@ -335,7 +372,7 @@ def load_and_cache_examples(args, task, tokenizer, evaluate=False):
     label_list = processor.get_labels()
     if task in ['mnli', 'mnli-mm'] and args.model_type in ['roberta']:
         # HACK(label indices are swapped in RoBERTa pretrained model)
-        label_list[1], label_list[2] = label_list[2], label_list[1] 
+        label_list[1], label_list[2] = label_list[2], label_list[1]
     examples = processor.get_dev_examples(args.data_dir) if evaluate else processor.get_train_examples(args.data_dir)
     features = convert_examples_to_features(examples,
                                             tokenizer,
@@ -583,7 +620,7 @@ def main():
         for checkpoint in checkpoints:
             global_step = checkpoint.split('-')[-1] if len(checkpoints) > 1 else ""
             prefix = checkpoint.split('/')[-1] if checkpoint.find('checkpoint') != -1 else ""
-            
+
             model = model_class.from_pretrained(checkpoint)
             model.to(args.device)
             result = evaluate(args, model, tokenizer, prefix=prefix)
