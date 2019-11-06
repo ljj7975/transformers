@@ -6,7 +6,7 @@ TASKS=["CoLA", "SST-2", "MRPC", "STS-B", "QQP", "MNLI", "QNLI", "RTE"]
 
 time_limit = None
 
-beluga_time_limit = {
+v100_time_limit = {
     "bert-base":{
             "CoLA" : "0-01:00:00",
             "SST-2" : "0-03:00:00",
@@ -219,9 +219,9 @@ def generate_dir(dir_path):
         os.makedirs(dir_path)
 
 
-def generate_base_script(model):
-
+def generate_base_script(model, v100):
     print(model, "baseline")
+    gpu_type = "v100:" if v100 else ""
 
     baseline_dir = "baseline"
     generate_dir(baseline_dir)
@@ -239,7 +239,7 @@ def generate_base_script(model):
                 "#!/bin/bash\n",
                 "#SBATCH --account=def-jimmylin\n",
                 f"#SBATCH --time={time_limit[model][task]}\n",
-                "#SBATCH --gres=gpu:1\n",
+                f"#SBATCH --gres=gpu:{gpu_type}1\n",
                 "#SBATCH --cpus-per-task=8\n",
                 f"#SBATCH --output=baseline-{model}-{task}_{lr}.out\n",
                 "#SBATCH --mem=64G\n",
@@ -260,9 +260,10 @@ def generate_base_script(model):
             file.writelines(lines)
 
 
-def generate_finetune_script(model):
-
+def generate_finetune_script(model, v100):
     print(model, "finetune")
+
+    gpu_type = "v100:" if v100 else ""
 
     baseline_dir = "finetune"
     generate_dir(baseline_dir)
@@ -288,7 +289,7 @@ def generate_finetune_script(model):
                 "#!/bin/bash\n",
                 "#SBATCH --account=def-jimmylin\n",
                 f"#SBATCH --time={time_limit[model][task]}\n",
-                "#SBATCH --gres=gpu:1\n",
+                f"#SBATCH --gres=gpu:{gpu_type}1\n",
                 "#SBATCH --cpus-per-task=8\n",
                 f"#SBATCH --output={model}-{task}_{layer}.out\n",
                 "#SBATCH --mem=64G\n",
@@ -317,7 +318,7 @@ def generate_finetune_script(model):
             "#!/bin/bash\n",
             "#SBATCH --account=def-jimmylin\n",
             f"#SBATCH --time={time_limit[model][task]}\n",
-            "#SBATCH --gres=gpu:1\n",
+            f"#SBATCH --gres=gpu:{gpu_type}1\n",
             "#SBATCH --cpus-per-task=8\n",
             f"#SBATCH --output={model}-{task}_BASE.out\n",
             "#SBATCH --mem=64G\n",
@@ -347,7 +348,7 @@ def generate_finetune_script(model):
             "#!/bin/bash\n",
             "#SBATCH --account=def-jimmylin\n",
             f"#SBATCH --time={time_limit[model][task]}\n",
-            "#SBATCH --gres=gpu:1\n",
+            f"#SBATCH --gres=gpu:{gpu_type}1\n",
             "#SBATCH --cpus-per-task=8\n",
             f"#SBATCH --output={model}-{task}_NONE.out\n",
             "#SBATCH --mem=64G\n",
@@ -378,13 +379,13 @@ def main():
 
     parser.add_argument("--baseline", action='store_true', help="Whether to run training.")
 
-    parser.add_argument("--beluga", action='store_true', help="Whether it is for beluga or not.")
+    parser.add_argument("--v100", action='store_true', help="Whether it is for v100 or not.")
 
     args = parser.parse_args()
 
-    if args.beluga:
-        print("for beluga")
-        time_limit=beluga_time_limit
+    if args.v100:
+        print("for v100")
+        time_limit=v100_time_limit
     else:
         time_limit=extended_time_limit
 
@@ -394,9 +395,9 @@ def main():
 
     for model in models:
         if args.baseline:
-            generate_base_script(model)
+            generate_base_script(model, args.v100)
         else:
-            generate_finetune_script(model)
+            generate_finetune_script(model, args.v100)
 
 if __name__ == "__main__":
     main()
