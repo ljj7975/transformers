@@ -63,7 +63,7 @@ v100_time_limit = {
             "WNLI" : "0-02:00:00"
         },
     "xlnet-large":{
-            "CoLA" : "0-06:00:00",
+            "CoLA" : "0-08:00:00",
             "SST-2" : "0-06:00:00",
             "MRPC" : "0-05:00:00",
             "STS-B" : "0-04:00:00",
@@ -132,7 +132,7 @@ extended_time_limit = {
             "WNLI" : "0-04:00:00"
         },
     "xlnet-large":{
-            "CoLA" : "0-12:00:00",
+            "CoLA" : "0-14:00:00",
             "SST-2" : "0-12:00:00",
             "MRPC" : "0-10:00:00",
             "STS-B" : "0-08:00:00",
@@ -240,7 +240,7 @@ def generate_base_script(model, v100):
                 "#SBATCH --account=def-jimmylin\n",
                 f"#SBATCH --time={time_limit[model][task]}\n",
                 f"#SBATCH --gres=gpu:{gpu_type}1\n",
-                "#SBATCH --cpus-per-task=8\n",
+                "#SBATCH --cpus-per-task=4\n",
                 f"#SBATCH --output=baseline-{model}-{task}_{lr}.out\n",
                 "#SBATCH --mem=64G\n",
                 "\n",
@@ -290,7 +290,7 @@ def generate_finetune_script(model, v100):
                 "#SBATCH --account=def-jimmylin\n",
                 f"#SBATCH --time={time_limit[model][task]}\n",
                 f"#SBATCH --gres=gpu:{gpu_type}1\n",
-                "#SBATCH --cpus-per-task=8\n",
+                "#SBATCH --cpus-per-task=4\n",
                 f"#SBATCH --output={model}-{task}_{layer}.out\n",
                 "#SBATCH --mem=64G\n",
                 "\n",
@@ -319,7 +319,7 @@ def generate_finetune_script(model, v100):
             "#SBATCH --account=def-jimmylin\n",
             f"#SBATCH --time={time_limit[model][task]}\n",
             f"#SBATCH --gres=gpu:{gpu_type}1\n",
-            "#SBATCH --cpus-per-task=8\n",
+            "#SBATCH --cpus-per-task=4\n",
             f"#SBATCH --output={model}-{task}_BASE.out\n",
             "#SBATCH --mem=64G\n",
             "\n",
@@ -349,7 +349,7 @@ def generate_finetune_script(model, v100):
             "#SBATCH --account=def-jimmylin\n",
             f"#SBATCH --time={time_limit[model][task]}\n",
             f"#SBATCH --gres=gpu:{gpu_type}1\n",
-            "#SBATCH --cpus-per-task=8\n",
+            "#SBATCH --cpus-per-task=4\n",
             f"#SBATCH --output={model}-{task}_NONE.out\n",
             "#SBATCH --mem=64G\n",
             "\n",
