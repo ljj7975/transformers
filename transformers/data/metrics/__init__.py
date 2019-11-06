@@ -17,6 +17,7 @@
 import csv
 import sys
 import logging
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +61,10 @@ if _has_sklearn:
     def glue_compute_metrics(task_name, preds, labels):
         assert len(preds) == len(labels)
         if task_name == "cola":
+            preds = np.append(preds, 1)
+            preds = np.append(preds, 0)
+            labels = np.append(labels, 1)
+            labels = np.append(labels, 0)
             return {"mcc": matthews_corrcoef(labels, preds)}
         elif task_name == "sst-2":
             return {"acc": simple_accuracy(preds, labels)}

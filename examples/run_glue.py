@@ -104,6 +104,9 @@ def train(args, train_dataset, model, tokenizer):
     parameters = model.named_parameters()
 
     param_maps = {
+        "roberta.encoder.layer":0,
+        "roberta.embeddings":0,
+        "roberta.pooler":0,
         "bert.encoder.layer":0,
         "bert.embeddings":0,
         "bert.pooler":0,
@@ -131,13 +134,21 @@ def train(args, train_dataset, model, tokenizer):
         if flag:
             print("failed to count layers", name)
 
-    if args.model_type == 'bert' or args.model_type == 'roberta':
+    if args.model_type == 'bert':
         organized_param_maps = {
             "embedding": param_maps["bert.embeddings"],
             "total_encoder": param_maps["bert.encoder.layer"],
             "encoder/12": param_maps["bert.encoder.layer"]/12,
             "encoder/24": param_maps["bert.encoder.layer"]/24,
             "pooling": param_maps["bert.pooler"],
+        }
+    elif args.model_type == 'roberta':
+        organized_param_maps = {
+            "embedding": param_maps["roberta.embeddings"],
+            "total_encoder": param_maps["roberta.encoder.layer"],
+            "encoder/12": param_maps["roberta.encoder.layer"]/12,
+            "encoder/24": param_maps["roberta.encoder.layer"]/24,
+            "pooling": param_maps["roberta.pooler"],
         }
     elif args.model_type == 'xlnet':
         organized_param_maps = {
