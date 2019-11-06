@@ -104,14 +104,13 @@ def train(args, train_dataset, model, tokenizer):
     parameters = model.named_parameters()
 
     param_maps = {
-        "embeddings":0,
-        "attention.self":0,
-        "attention.output":0,
-        "intermediate.dense":0,
-        "output.dense":0,
-        "output.LayerNorm":0,
-        "pooler":0,
-        "classifier":0
+        "bert.encoder.layer":0,
+        "bert.embeddings":0,
+        "bert.pooler":0,
+        "transformer.mask_emb":0,
+        "transformer.word_embedding.weight":0,
+        "transformer.layer":0,
+        "sequence_summary":0
     }
 
     total_param = 0
@@ -122,24 +121,34 @@ def train(args, train_dataset, model, tokenizer):
         for size in param_size:
             param_aggregated = param_aggregated * size
 
-        total_param = total_param + param_aggregated
-
         flag = True
         for key in param_maps.keys():
             if key in name:
-                print(key, name)
                 flag=False
                 param_maps[key] = param_maps[key] + param_aggregated
+                total_param = total_param + param_aggregated
                 break
         if flag:
             print("failed to count layers", name)
 
-    param_maps["output"] = param_maps["output.dense"] + param_maps["output.LayerNorm"]
+    if args.model_type == 'bert' or args.model_type == 'roberta':
+        organized_param_maps = {
+            "embedding": param_maps["bert.embeddings"],
+            "total_encoder": param_maps["bert.encoder.layer"],
+            "encoder/12": param_maps["bert.encoder.layer"]/12,
+            "encoder/24": param_maps["bert.encoder.layer"]/24,
+            "pooling": param_maps["bert.pooler"],
+        }
+    elif args.model_type == 'xlnet':
+        organized_param_maps = {
+            "embedding": param_maps["transformer.mask_emb"] + param_maps["transformer.word_embedding.weight"],
+            "total_encoder": param_maps["transformer.layer"],
+            "encoder/12": param_maps["transformer.layer"]/12,
+            "encoder/24": param_maps["transformer.layer"]/24,
+            "pooling": param_maps["sequence_summary"]
+        }
 
-    del param_maps["output.dense"]
-    del param_maps["output.LayerNorm"]
-
-    for key, val in param_maps.items():
+    for key, val in organized_param_maps.items():
         print(key, '\n\t', val, '\t', round(val/1000000,1), '\t', round(100*val/total_param,1))
 
     print("total", round(total_param/1000000,1))
