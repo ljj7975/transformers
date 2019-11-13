@@ -103,6 +103,10 @@ def train(args, train_dataset, model, tokenizer):
 
     parameters = model.named_parameters()
 
+    # print("before")
+    # for name, params in parameters:
+    #     print(name, params.size())
+
     param_maps = {
         "roberta.encoder.layer":0,
         "roberta.embeddings":0,
@@ -437,6 +441,7 @@ def main():
                         help="The name of the task to train selected in the list: " + ", ".join(processors.keys()))
     parser.add_argument("--output_dir", default=None, type=str, required=True,
                         help="The output directory where the model predictions and checkpoints will be written.")
+    parser.add_argument("--mt_model_path", default=None, type=str, help="Path to multi-task model for weight initialization")
 
     ## Other parameters
     parser.add_argument("--config_name", default="", type=str,
@@ -598,6 +603,11 @@ def main():
 
     logger.info("Training/evaluation parameters %s", args)
 
+    if args.mt_model_path:
+        # Load mt-model weights and save as a pre-trained-model
+        logger.info("Loading mt-dnn model weights")
+        mt_dnn_model = torch.load('mt_dnn_model/bert_model_base_uncased.pt')
+        model.load_state_dict(mt_dnn_model['state'], strict=False)
 
     # Training
     if args.do_train:
