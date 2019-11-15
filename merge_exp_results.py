@@ -6,7 +6,6 @@ from pathlib import Path
 
 
 models=["bert-base", "bert-large", "roberta-base", "roberta-large", "xlnet-base", "xlnet-large"]
-tasks=["CoLA", "SST-2", "MRPC", "STS-B", "QQP", "MNLI", "QNLI", "RTE"]
 
 tasks = {
     "CoLA":["mcc"],
@@ -15,6 +14,7 @@ tasks = {
     "STS-B":["pearson", "spearmanr", "corr"],
     "QQP":["acc", "f1", "acc_and_f1"],
     "MNLI":["acc"],
+    "MNLI-MM":["acc"],
     "QNLI":["acc"],
     "RTE":["acc"]
 }
@@ -71,9 +71,7 @@ def main():
 
     parser.add_argument("--target_dir", default="exp_results", type=str,
                         help="directory path which the results will be updated")
-
-    parser.add_argument("--override", action='store_true', help="whether to override the same seed.")
-
+    
     args = parser.parse_args()
 
     for model in models:
