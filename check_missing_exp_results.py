@@ -24,7 +24,7 @@ def check_results(file_name, target_count):
         print(f"\tFile {file_name} is missing all entries")
         print(f"\tmissing seeds {list(range(5))}")
         return
-    
+
     seeds = set()
 
     file = open(file_name, "r")
@@ -39,7 +39,7 @@ def check_results(file_name, target_count):
         print(f"File {file_name} is missing {missing_count} entries")
 
         missing_seeds = []
-        for i in range(target_count):
+        for i in range(1, target_count+1):
             if str(i) not in seeds:
                 missing_seeds.append(i)
 
@@ -51,7 +51,7 @@ def check_results(file_name, target_count):
 
 def main():
     parser = argparse.ArgumentParser()
-    
+
     parser.add_argument("--target_count", default=5, type=int,
                         help="minimal experiments necessary")
 
