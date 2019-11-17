@@ -260,12 +260,18 @@ def generate_base_script(model, v100):
             file.writelines(lines)
 
 
-def generate_finetune_script(model, v100):
-    print(model, "finetune")
-
+def generate_finetune_script(model, v100, mt_dnn):
     gpu_type = "v100:" if v100 else ""
 
-    baseline_dir = "finetune"
+    if mt_dnn:
+        baseline_dir = "mt_dnn_finetune"
+        mt_dnn_arg = "TRUE"
+    else:
+        baseline_dir = "finetune"
+        mt_dnn_arg = "FALSE"
+
+    print(model, baseline_dir, gpu_type, mt_dnn_arg)
+
     generate_dir(baseline_dir)
 
     model_dir = f"{baseline_dir}/{model}"
@@ -299,7 +305,7 @@ def generate_finetune_script(model, v100):
                 f"TASK=\'{task}\'\n",
                 "SEED=$1\n",
                 "\n",
-                f"bash scripts/glue_scripts/finetune/{model}.sh $TASK \'FT\' $SEED {learning_rate[model][task]}e-5{layer_str}\n",
+                f"bash scripts/glue_scripts/finetune/{model}.sh $TASK {mt_dnn_arg} \'FT\' $SEED {learning_rate[model][task]}e-5{layer_str}\n",
                 "\n",
                 "deactivate\n"
             ]
@@ -328,7 +334,7 @@ def generate_finetune_script(model, v100):
             f"TASK=\'{task}\'\n",
             "SEED=$1\n",
             "\n",
-            f"bash scripts/glue_scripts/finetune/{model}.sh $TASK \'BASE\' $SEED {learning_rate[model][task]}e-5 \n",
+            f"bash scripts/glue_scripts/finetune/{model}.sh $TASK {mt_dnn_arg} \'BASE\' $SEED {learning_rate[model][task]}e-5 \n",
             "\n",
             "deactivate\n"
         ]
@@ -358,7 +364,7 @@ def generate_finetune_script(model, v100):
             f"TASK=\'{task}\'\n",
             "SEED=$1\n",
             "\n",
-            f"bash scripts/glue_scripts/finetune/{model}.sh $TASK \'NONE\' $SEED {learning_rate[model][task]}e-5 \n",
+            f"bash scripts/glue_scripts/finetune/{model}.sh $TASK {mt_dnn_arg} \'NONE\' $SEED {learning_rate[model][task]}e-5 \n",
             "\n",
             "deactivate\n"
         ]
@@ -381,10 +387,11 @@ def main():
 
     parser.add_argument("--v100", action='store_true', help="Whether it is for v100 or not.")
 
+    parser.add_argument("--mt_dnn", action='store_true', help="ture to use mt-dnn weights.")
+
     args = parser.parse_args()
 
     if args.v100:
-        print("for v100")
         time_limit=v100_time_limit
     else:
         time_limit=extended_time_limit
@@ -397,7 +404,7 @@ def main():
         if args.baseline:
             generate_base_script(model, args.v100)
         else:
-            generate_finetune_script(model, args.v100)
+            generate_finetune_script(model, args.v100, args.mt_dnn)
 
 if __name__ == "__main__":
     main()

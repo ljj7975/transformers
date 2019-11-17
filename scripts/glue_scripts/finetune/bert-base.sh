@@ -1,8 +1,9 @@
 TASK=$1
-EXP=$2
-SEED=$3
-LR=$4
-LAYERS_TO_FINE_TUNE="${@:5}"
+MT_DNN=$2
+EXP=$3
+SEED=$4
+LR=$5
+LAYERS_TO_FINE_TUNE="${@:6}"
 
 if [ $EXP == "BASE" ] # no fine tuning
 then
@@ -18,11 +19,16 @@ else
     exit 1
 fi
 
+if [ $MT_DNN == "TRUE" ]
+then
+    OUTPUT_DIR=$SCRATCH_DIR/mt_dnn_models/bert-base/$TASK/$LAYER_FOLDER_NAME/$SEED
+    LOG_FILE_DIR=mt_dnn_logs/bert-base/$TASK/
+else
+    OUTPUT_DIR=$SCRATCH_DIR/models/bert-base/$TASK/$LAYER_FOLDER_NAME/$SEED
+    LOG_FILE_DIR=logs/bert-base/$TASK/
+fi
 
-OUTPUT_DIR=$SCRATCH_DIR/models/bert-base/$TASK/$LAYER_FOLDER_NAME/$SEED
 mkdir -p $OUTPUT_DIR
-
-LOG_FILE_DIR=logs/bert-base/$TASK/
 mkdir -p $LOG_FILE_DIR
 
 echo "TASK: "$TASK
@@ -51,8 +57,14 @@ then
 elif [ $TASK == "MNLI" ]
 then
     METRICS+=("acc")
-    MM_OUTPUT_DIR=$SCRATCH_DIR/models/bert-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
-    MM_LOG_FILE_DIR=logs/bert-base/$TASK-MM/
+    if [ $MT_DNN == "TRUE" ]
+    then
+        MM_OUTPUT_DIR=$SCRATCH_DIR/mt_dnn_models/bert-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
+        MM_LOG_FILE_DIR=mt_dnn_logs/bert-base/$TASK-MM/
+    else
+        MM_OUTPUT_DIR=$SCRATCH_DIR/models/bert-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
+        MM_LOG_FILE_DIR=logs/bert-base/$TASK-MM/
+    fi
     mkdir -p $MM_OUTPUT_DIR
     mkdir -p $MM_LOG_FILE_DIR
 elif [ $TASK == "QNLI" ]
@@ -71,62 +83,126 @@ fi
 
 # run finetuning
 
-if [ $EXP == "BASE" ] # no fine tuning
+if [ $MT_DNN == "TRUE" ]
 then
-    python examples/run_glue.py \
-      --model_type bert \
-      --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
-      --task_name $TASK \
-      --do_train \
-      --do_eval \
-      --do_lower_case \
-      --data_dir $DATA_DIR/glue/$TASK/ \
-      --max_seq_length 128 \
-      --per_gpu_train_batch_size 16 \
-      --learning_rate ${LR} \
-      --num_train_epochs 3.0 \
-      --save_steps 0 \
-      --seed $SEED \
-      --output_dir $OUTPUT_DIR \
-      --overwrite_output_dir
-elif [ $EXP == "FT" ] # fine tune given layers
-then
-    python examples/run_glue.py \
-      --model_type bert \
-      --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
-      --task_name $TASK \
-      --do_train \
-      --do_eval \
-      --do_lower_case \
-      --data_dir $DATA_DIR/glue/$TASK/ \
-      --max_seq_length 128 \
-      --per_gpu_train_batch_size 16 \
-      --learning_rate ${LR} \
-      --num_train_epochs 3.0 \
-      --save_steps 0 \
-      --seed $SEED \
-      --layers_to_fine_tune $LAYERS_TO_FINE_TUNE \
-      --output_dir $OUTPUT_DIR \
-      --overwrite_output_dir
-elif [ $EXP == "NONE" ] # No layers to fine tune (only classifier)
-then
-    python examples/run_glue.py \
-      --model_type bert \
-      --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
-      --task_name $TASK \
-      --do_train \
-      --do_eval \
-      --do_lower_case \
-      --data_dir $DATA_DIR/glue/$TASK/ \
-      --max_seq_length 128 \
-      --per_gpu_train_batch_size 16 \
-      --learning_rate ${LR} \
-      --num_train_epochs 3.0 \
-      --save_steps 0 \
-      --seed $SEED \
-      --only_classifier \
-      --output_dir $OUTPUT_DIR \
-      --overwrite_output_dir
+    if [ $EXP == "BASE" ] # no fine tuning
+    then
+        python examples/run_glue.py \
+          --model_type bert \
+          --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+          --mt_model_path $TRAINED_MODEL_DIR/mt-dnn-bert/base.pt \
+          --task_name $TASK \
+          --do_train \
+          --do_eval \
+          --do_lower_case \
+          --data_dir $DATA_DIR/glue/$TASK/ \
+          --max_seq_length 128 \
+          --per_gpu_train_batch_size 16 \
+          --learning_rate ${LR} \
+          --num_train_epochs 3.0 \
+          --save_steps 0 \
+          --seed $SEED \
+          --output_dir $OUTPUT_DIR \
+          --overwrite_output_dir
+    elif [ $EXP == "FT" ] # fine tune given layers
+    then
+        python examples/run_glue.py \
+          --model_type bert \
+          --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+          --mt_model_path $TRAINED_MODEL_DIR/mt-dnn-bert/base.pt \
+          --task_name $TASK \
+          --do_train \
+          --do_eval \
+          --do_lower_case \
+          --data_dir $DATA_DIR/glue/$TASK/ \
+          --max_seq_length 128 \
+          --per_gpu_train_batch_size 16 \
+          --learning_rate ${LR} \
+          --num_train_epochs 3.0 \
+          --save_steps 0 \
+          --seed $SEED \
+          --layers_to_fine_tune $LAYERS_TO_FINE_TUNE \
+          --output_dir $OUTPUT_DIR \
+          --overwrite_output_dir
+    elif [ $EXP == "NONE" ] # No layers to fine tune (only classifier)
+    then
+        python examples/run_glue.py \
+          --model_type bert \
+          --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+          --mt_model_path $TRAINED_MODEL_DIR/mt-dnn-bert/base.pt \
+          --task_name $TASK \
+          --do_train \
+          --do_eval \
+          --do_lower_case \
+          --data_dir $DATA_DIR/glue/$TASK/ \
+          --max_seq_length 128 \
+          --per_gpu_train_batch_size 16 \
+          --learning_rate ${LR} \
+          --num_train_epochs 3.0 \
+          --save_steps 0 \
+          --seed $SEED \
+          --only_classifier \
+          --output_dir $OUTPUT_DIR \
+          --overwrite_output_dir
+    fi
+else
+    if [ $EXP == "BASE" ] # no fine tuning
+    then
+        python examples/run_glue.py \
+          --model_type bert \
+          --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+          --task_name $TASK \
+          --do_train \
+          --do_eval \
+          --do_lower_case \
+          --data_dir $DATA_DIR/glue/$TASK/ \
+          --max_seq_length 128 \
+          --per_gpu_train_batch_size 16 \
+          --learning_rate ${LR} \
+          --num_train_epochs 3.0 \
+          --save_steps 0 \
+          --seed $SEED \
+          --output_dir $OUTPUT_DIR \
+          --overwrite_output_dir
+    elif [ $EXP == "FT" ] # fine tune given layers
+    then
+        python examples/run_glue.py \
+          --model_type bert \
+          --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+          --task_name $TASK \
+          --do_train \
+          --do_eval \
+          --do_lower_case \
+          --data_dir $DATA_DIR/glue/$TASK/ \
+          --max_seq_length 128 \
+          --per_gpu_train_batch_size 16 \
+          --learning_rate ${LR} \
+          --num_train_epochs 3.0 \
+          --save_steps 0 \
+          --seed $SEED \
+          --layers_to_fine_tune $LAYERS_TO_FINE_TUNE \
+          --output_dir $OUTPUT_DIR \
+          --overwrite_output_dir
+    elif [ $EXP == "NONE" ] # No layers to fine tune (only classifier)
+    then
+        python examples/run_glue.py \
+          --model_type bert \
+          --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+          --task_name $TASK \
+          --do_train \
+          --do_eval \
+          --do_lower_case \
+          --data_dir $DATA_DIR/glue/$TASK/ \
+          --max_seq_length 128 \
+          --per_gpu_train_batch_size 16 \
+          --learning_rate ${LR} \
+          --num_train_epochs 3.0 \
+          --save_steps 0 \
+          --seed $SEED \
+          --only_classifier \
+          --output_dir $OUTPUT_DIR \
+          --overwrite_output_dir
+    fi
 fi
 
 echo "RESULTS"
