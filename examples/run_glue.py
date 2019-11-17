@@ -35,6 +35,7 @@ except:
     from tensorboardX import SummaryWriter
 
 from tqdm import tqdm, trange
+from pprint import pprint
 
 from transformers import (WEIGHTS_NAME, BertConfig,
                                   BertForSequenceClassification, BertTokenizer,
@@ -105,7 +106,7 @@ def train(args, train_dataset, model, tokenizer):
 
     # print("before")
     # for name, params in parameters:
-    #     print(name, params.size())
+    #     print(name, params.size(), params.mean())
 
     param_maps = {
         "roberta.encoder.layer":0,
@@ -137,6 +138,7 @@ def train(args, train_dataset, model, tokenizer):
                 break
         if flag:
             print("failed to count layers", name)
+
 
     if args.model_type == 'bert':
         organized_param_maps = {
@@ -606,8 +608,10 @@ def main():
     if args.mt_model_path:
         # Load mt-model weights and save as a pre-trained-model
         logger.info("Loading mt-dnn model weights")
-        mt_dnn_model = torch.load('mt_dnn_model/bert_model_base_uncased.pt')
-        model.load_state_dict(mt_dnn_model['state'], strict=False)
+        mt_dnn_model = torch.load(args.mt_model_path)
+
+        model.load_state_dict(mt_dnn_model['state_dict'], strict=False)
+
 
     # Training
     if args.do_train:
