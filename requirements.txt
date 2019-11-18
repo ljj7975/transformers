@@ -11,3 +11,4 @@ regex
 sentencepiece
 # For XLM
 sacremoses
+scikit-learn
