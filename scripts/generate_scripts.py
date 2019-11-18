@@ -3,6 +3,7 @@ import os
 import shutil
 
 TASKS=["CoLA", "SST-2", "MRPC", "STS-B", "QQP", "MNLI", "QNLI", "RTE"]
+EXP_TASKS=["QQP", "MNLI", "QNLI"]
 
 time_limit = None
 
@@ -281,6 +282,12 @@ def generate_finetune_script(model, v100, mt_dnn):
 
     generate_dir(model_dir)
 
+    exp_model_dir = f"{model_dir}/exp"
+    cheap_model_dir = f"{model_dir}/cheap"
+
+    generate_dir(exp_model_dir)
+    generate_dir(cheap_model_dir)
+
     if "base" in model:
         layers = list(range(6, 12))
     else:
@@ -310,7 +317,11 @@ def generate_finetune_script(model, v100, mt_dnn):
                 "deactivate\n"
             ]
 
-            file_name = f"{model_dir}/{task}_{layer}.sh"
+            if layer == 12 or layer == 13 or task in EXP_TASKS:
+                file_name = f"{exp_model_dir}/{task}_{layer}.sh"
+            else:
+                file_name = f"{cheap_model_dir}/{task}_{layer}.sh"
+
             file = open(file_name, "w")
 
             file.writelines(lines)
@@ -339,7 +350,8 @@ def generate_finetune_script(model, v100, mt_dnn):
             "deactivate\n"
         ]
 
-        file_name = f"{model_dir}/{task}_BASE.sh"
+        file_name = f"{exp_model_dir}/{task}_BASE.sh"
+        
         file = open(file_name, "w")
 
         file.writelines(lines)
@@ -369,7 +381,11 @@ def generate_finetune_script(model, v100, mt_dnn):
             "deactivate\n"
         ]
 
-        file_name = f"{model_dir}/{task}_NONE.sh"
+        if task in EXP_TASKS:
+            file_name = f"{exp_model_dir}/{task}_NONE.sh"
+        else:
+            file_name = f"{cheap_model_dir}/{task}_NONE.sh"
+
         file = open(file_name, "w")
 
         file.writelines(lines)
