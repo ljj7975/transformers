@@ -12,12 +12,6 @@ echo "copying scripts"
 cp -rf scripts "scripts_$account"
 cd "scripts_$account"
 
-echo "removing source activate"
-find ./ -type f -exec sed -i -e 's/source ~\/ENV\/bin\/activate//g' {} \;
-
-echo "removing deactivate"
-find ./ -type f -exec sed -i -e 's/deactivate//g' {} \;
-
 if [[ $account == "lilimou" ]]
 then
     echo "scripts_$account"

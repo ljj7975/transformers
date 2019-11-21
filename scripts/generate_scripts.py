@@ -252,8 +252,7 @@ def generate_base_script(model, v100):
                 "SEED=$1\n",
                 "\n",
                 f"bash scripts/glue_scripts/baseline/{model}.sh $TASK $SEED {lr}e-5\n",
-                "\n",
-                "deactivate\n"
+                "\n"
             ]
 
             file_name = f"{model_dir}/{task}_{lr}.sh"
@@ -315,8 +314,7 @@ def generate_finetune_script(model, v100, mt_dnn):
                 "SEED=$1\n",
                 "\n",
                 f"bash scripts/glue_scripts/finetune/{model}.sh $TASK {mt_dnn_arg} \'FT\' $SEED {learning_rate[model][task]}e-5{layer_str}\n",
-                "\n",
-                "deactivate\n"
+                "\n"
             ]
 
             if layer == 12 or layer == 13 or task in EXP_TASKS:
@@ -349,8 +347,7 @@ def generate_finetune_script(model, v100, mt_dnn):
             "SEED=$1\n",
             "\n",
             f"bash scripts/glue_scripts/finetune/{model}.sh $TASK {mt_dnn_arg} \'BASE\' $SEED {learning_rate[model][task]}e-5 \n",
-            "\n",
-            "deactivate\n"
+            "\n"
         ]
 
         file_name = f"{exp_model_dir}/{task}_BASE.sh"
@@ -381,8 +378,7 @@ def generate_finetune_script(model, v100, mt_dnn):
             "SEED=$1\n",
             "\n",
             f"bash scripts/glue_scripts/finetune/{model}.sh $TASK {mt_dnn_arg} \'NONE\' $SEED {learning_rate[model][task]}e-5 \n",
-            "\n",
-            "deactivate\n"
+            "\n"
         ]
 
         if task in EXP_TASKS:
