@@ -66,10 +66,10 @@ def copy_results(source_file, target_file):
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--source_dir", default="logs", type=str,
+    parser.add_argument("--source_dir", '-s', default="logs", type=str,
                         help="directory path which contains the source results")
 
-    parser.add_argument("--target_dir", default="exp_results", type=str,
+    parser.add_argument("--target_dir", '-t', default="exp_results", type=str,
                         help="directory path which the results will be updated")
     
     args = parser.parse_args()
@@ -84,6 +84,8 @@ def main():
                 continue
 
             target_dir_path = "{0}/{1}/{2}".format(args.target_dir, model, task)
+            if not os.path.exists(target_dir_path):
+                os.makedirs(target_dir_path)
 
             for metric in metrics:
                 # base
