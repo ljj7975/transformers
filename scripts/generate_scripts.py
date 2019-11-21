@@ -245,7 +245,8 @@ def generate_base_script(model, v100):
                 f"#SBATCH --output=baseline-{model}-{task}_{lr}.out\n",
                 "#SBATCH --mem=64G\n",
                 "\n",
-                "source ~/ENV/bin/activate\n",
+                "source ~/anaconda3/etc/profile.d/conda.sh\n",
+                "conda activate brandon_transformers\n",
                 "\n",
                 f"TASK=\'{task}\'\n",
                 "SEED=$1\n",
@@ -307,7 +308,8 @@ def generate_finetune_script(model, v100, mt_dnn):
                 f"#SBATCH --output={model}-{task}_{layer}.out\n",
                 "#SBATCH --mem=64G\n",
                 "\n",
-                "source ~/ENV/bin/activate\n",
+                "source ~/anaconda3/etc/profile.d/conda.sh\n",
+                "conda activate brandon_transformers\n",
                 "\n",
                 f"TASK=\'{task}\'\n",
                 "SEED=$1\n",
@@ -340,7 +342,8 @@ def generate_finetune_script(model, v100, mt_dnn):
             f"#SBATCH --output={model}-{task}_BASE.out\n",
             "#SBATCH --mem=64G\n",
             "\n",
-            "source ~/ENV/bin/activate\n",
+            "source ~/anaconda3/etc/profile.d/conda.sh\n",
+            "conda activate brandon_transformers\n",
             "\n",
             f"TASK=\'{task}\'\n",
             "SEED=$1\n",
@@ -351,7 +354,7 @@ def generate_finetune_script(model, v100, mt_dnn):
         ]
 
         file_name = f"{exp_model_dir}/{task}_BASE.sh"
-        
+
         file = open(file_name, "w")
 
         file.writelines(lines)
@@ -371,7 +374,8 @@ def generate_finetune_script(model, v100, mt_dnn):
             f"#SBATCH --output={model}-{task}_NONE.out\n",
             "#SBATCH --mem=64G\n",
             "\n",
-            "source ~/ENV/bin/activate\n",
+            "source ~/anaconda3/etc/profile.d/conda.sh\n",
+            "conda activate brandon_transformers\n",
             "\n",
             f"TASK=\'{task}\'\n",
             "SEED=$1\n",
