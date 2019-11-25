@@ -355,7 +355,7 @@ def generate_finetune_script(model, v100, mt_dnn):
         ]
 
         if task in EXP_TASKS:
-            file_name = f"{exp_model_dir}/{task}_{layer}.sh"
+            file_name = f"{exp_model_dir}/{task}_BASE.sh"
         else:
             file_name = f"{mid_model_dir}/{task}_BASE.sh"
 
