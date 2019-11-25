@@ -55,7 +55,7 @@ def main():
     parser.add_argument("--target_count", default=5, type=int,
                         help="minimal experiments necessary")
 
-    parser.add_argument("--results_dir", default="exp_results", type=str,
+    parser.add_argument("--results_dir", "-r", default="exp_results", type=str,
                         help="directory path which contains the results")
 
     args = parser.parse_args()
