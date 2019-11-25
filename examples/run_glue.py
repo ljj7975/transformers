@@ -102,11 +102,13 @@ def train(args, train_dataset, model, tokenizer):
     elif args.layers_to_fine_tune:
         logger.info(f"Finetuning layers: {str(args.layers_to_fine_tune)}")
 
-    parameters = model.named_parameters()
+    # parameters = model.named_parameters()
 
     # print("before")
     # for name, params in parameters:
     #     print(name, params.size(), params.mean())
+
+    parameters = model.named_parameters()
 
     param_maps = {
         "roberta.encoder.layer":0,
@@ -169,6 +171,8 @@ def train(args, train_dataset, model, tokenizer):
         print(key, '\n\t', val, '\t', round(val/1000000,1), '\t', round(100*val/total_param,1))
 
     print("total", round(total_param/1000000,1))
+
+    parameters = model.named_parameters()
 
     if args.only_classifier or args.layers_to_fine_tune:
         parameters = []
