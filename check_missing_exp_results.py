@@ -22,7 +22,7 @@ tasks = {
 def check_results(file_name, target_count):
     if not os.path.exists(file_name):
         print(f"\tFile {file_name} is missing all entries")
-        print(f"\tmissing seeds {list(range(5))}")
+        print(f"\tmissing seeds {list(range(1, 6))}")
         return
 
     seeds = set()
