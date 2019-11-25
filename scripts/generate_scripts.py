@@ -13,8 +13,8 @@ v100_time_limit = {
             "SST-2" : "0-03:00:00",
             "MRPC" : "0-01:00:00",
             "STS-B" : "0-01:00:00",
-            "QQP" : "1-06:00:00",
-            "MNLI" : "1-06:00:00",
+            "QQP" : "2-00:00:00",
+            "MNLI" : "2-00:00:00",
             "QNLI" : "1-00:00:00",
             "RTE" : "0-01:00:00",
             "WNLI" : "0-01:00:00"
@@ -35,8 +35,8 @@ v100_time_limit = {
             "SST-2" : "0-10:00:00",
             "MRPC" : "0-02:00:00",
             "STS-B" : "0-04:00:00",
-            "QQP" : "3-00:00:00",
-            "MNLI" : "2-00:00:00",
+            "QQP" : "4-00:00:00",
+            "MNLI" : "4-00:00:00",
             "QNLI" : "1-10:00:00",
             "RTE" : "0-01:00:00",
             "WNLI" : "0-02:00:00"
@@ -283,9 +283,11 @@ def generate_finetune_script(model, v100, mt_dnn):
     generate_dir(model_dir)
 
     exp_model_dir = f"{model_dir}/exp"
+    mid_model_dir = f"{model_dir}/mid"
     cheap_model_dir = f"{model_dir}/cheap"
 
     generate_dir(exp_model_dir)
+    generate_dir(mid_model_dir)
     generate_dir(cheap_model_dir)
 
     if "base" in model:
@@ -317,8 +319,10 @@ def generate_finetune_script(model, v100, mt_dnn):
                 "\n"
             ]
 
-            if layer == 12 or layer == 13 or task in EXP_TASKS:
+            if task in EXP_TASKS:
                 file_name = f"{exp_model_dir}/{task}_{layer}.sh"
+            elif layer == 12 or layer == 13:
+                file_name = f"{mid_model_dir}/{task}_{layer}.sh"
             else:
                 file_name = f"{cheap_model_dir}/{task}_{layer}.sh"
 
@@ -350,7 +354,10 @@ def generate_finetune_script(model, v100, mt_dnn):
             "\n"
         ]
 
-        file_name = f"{exp_model_dir}/{task}_BASE.sh"
+        if task in EXP_TASKS:
+            file_name = f"{exp_model_dir}/{task}_{layer}.sh"
+        else:
+            file_name = f"{mid_model_dir}/{task}_BASE.sh"
 
         file = open(file_name, "w")
 
