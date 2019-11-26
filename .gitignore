@@ -7,6 +7,7 @@ __pycache__/
 *.out
 scripts/baseline/*
 scripts/finetune/*
+scripts/mt_dnn_finetune/*
 
 # C extensions
 *.so
