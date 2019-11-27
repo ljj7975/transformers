@@ -321,7 +321,7 @@ def generate_finetune_script(model, v100, mt_dnn):
 
             if task in EXP_TASKS:
                 file_name = f"{exp_model_dir}/{task}_{layer}.sh"
-            elif layer == 12 or layer == 13:
+            elif layer == 12 or layer == 13 or layer == 14 or layer == 15 or layer == 16:
                 file_name = f"{mid_model_dir}/{task}_{layer}.sh"
             else:
                 file_name = f"{cheap_model_dir}/{task}_{layer}.sh"
