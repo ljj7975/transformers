@@ -36,7 +36,7 @@ def check_results(file_name, target_count):
 
     if len(seeds) < target_count:
         missing_count = target_count - len(seeds)
-        print(f"File {file_name} is missing {missing_count} entries")
+        print(f"\tFile {file_name} is missing {missing_count} entries")
 
         missing_seeds = []
         for i in range(1, target_count+1):
