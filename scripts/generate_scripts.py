@@ -13,8 +13,8 @@ v100_time_limit = {
             "SST-2" : "0-05:00:00",
             "MRPC" : "0-02:00:00",
             "STS-B" : "0-02:00:00",
-            "QQP" : "2-00:00:00",
-            "MNLI" : "2-00:00:00",
+            "QQP" : "1-10:00:00",
+            "MNLI" : "1-10:00:00",
             "QNLI" : "1-00:00:00",
             "RTE" : "0-02:00:00",
             "WNLI" : "0-02:00:00"
@@ -35,9 +35,9 @@ v100_time_limit = {
             "SST-2" : "0-10:00:00",
             "MRPC" : "0-03:00:00",
             "STS-B" : "0-04:00:00",
-            "QQP" : "4-00:00:00",
-            "MNLI" : "4-00:00:00",
-            "QNLI" : "1-10:00:00",
+            "QQP" : "3-00:00:00",
+            "MNLI" : "3-00:00:00",
+            "QNLI" : "1-00:00:00",
             "RTE" : "0-02:00:00",
             "WNLI" : "0-03:00:00"
         },
@@ -297,6 +297,11 @@ def generate_finetune_script(model, v100, mt_dnn):
 
     for task in TASKS:
         layer_str = ""
+
+        num_gpu = 1
+        if task in EXP_TASKS:
+            num_gpu = 2
+
         for layer in reversed(layers):
             layer_str = layer_str + f" {layer}"
 
@@ -304,7 +309,7 @@ def generate_finetune_script(model, v100, mt_dnn):
                 "#!/bin/bash\n",
                 "#SBATCH --account=def-jimmylin\n",
                 f"#SBATCH --time={time_limit[model][task]}\n",
-                f"#SBATCH --gres=gpu:{gpu_type}1\n",
+                f"#SBATCH --gres=gpu:{gpu_type}{num_gpu}\n",
                 "#SBATCH --cpus-per-task=4\n",
                 f"#SBATCH --output={model}-{task}_{layer}.out\n",
                 "#SBATCH --mem=64G\n",
@@ -340,7 +345,7 @@ def generate_finetune_script(model, v100, mt_dnn):
             "#!/bin/bash\n",
             "#SBATCH --account=def-jimmylin\n",
             f"#SBATCH --time={time_limit[model][task]}\n",
-            f"#SBATCH --gres=gpu:{gpu_type}1\n",
+            f"#SBATCH --gres=gpu:{gpu_type}{num_gpu}\n",
             "#SBATCH --cpus-per-task=4\n",
             f"#SBATCH --output={model}-{task}_BASE.out\n",
             "#SBATCH --mem=64G\n",
@@ -374,7 +379,7 @@ def generate_finetune_script(model, v100, mt_dnn):
             "#!/bin/bash\n",
             "#SBATCH --account=def-jimmylin\n",
             f"#SBATCH --time={time_limit[model][task]}\n",
-            f"#SBATCH --gres=gpu:{gpu_type}1\n",
+            f"#SBATCH --gres=gpu:{gpu_type}{num_gpu}\n",
             "#SBATCH --cpus-per-task=4\n",
             f"#SBATCH --output={model}-{task}_NONE.out\n",
             "#SBATCH --mem=64G\n",
