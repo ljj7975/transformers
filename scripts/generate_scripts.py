@@ -238,7 +238,8 @@ def generate_base_script(model, v100):
         for lr in range(1,6):
             lines = [
                 "#!/bin/bash\n",
-                "#SBATCH --account=def-jimmylin\n",
+                "#SBATCH --account=ctb-ontario\n",
+                "#SBATCH --partition=c-ontario\n"
                 f"#SBATCH --time={time_limit[model][task]}\n",
                 f"#SBATCH --gres=gpu:{gpu_type}1\n",
                 "#SBATCH --cpus-per-task=4\n",
@@ -307,7 +308,8 @@ def generate_finetune_script(model, v100, mt_dnn):
 
             lines = [
                 "#!/bin/bash\n",
-                "#SBATCH --account=def-jimmylin\n",
+                "#SBATCH --account=ctb-ontario\n",
+                "#SBATCH --partition=c-ontario\n"
                 f"#SBATCH --time={time_limit[model][task]}\n",
                 f"#SBATCH --gres=gpu:{gpu_type}{num_gpu}\n",
                 "#SBATCH --cpus-per-task=4\n",
@@ -343,7 +345,8 @@ def generate_finetune_script(model, v100, mt_dnn):
 
         lines = [
             "#!/bin/bash\n",
-            "#SBATCH --account=def-jimmylin\n",
+            "#SBATCH --account=ctb-ontario\n",
+            "#SBATCH --partition=c-ontario\n"
             f"#SBATCH --time={time_limit[model][task]}\n",
             f"#SBATCH --gres=gpu:{gpu_type}{num_gpu}\n",
             "#SBATCH --cpus-per-task=4\n",
@@ -377,7 +380,8 @@ def generate_finetune_script(model, v100, mt_dnn):
 
         lines = [
             "#!/bin/bash\n",
-            "#SBATCH --account=def-jimmylin\n",
+            "#SBATCH --account=ctb-ontario\n",
+            "#SBATCH --partition=c-ontario\n"
             f"#SBATCH --time={time_limit[model][task]}\n",
             f"#SBATCH --gres=gpu:{gpu_type}{num_gpu}\n",
             "#SBATCH --cpus-per-task=4\n",

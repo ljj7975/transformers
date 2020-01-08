@@ -6,6 +6,7 @@ from pathlib import Path
 
 
 models=["bert-base", "bert-large", "roberta-base", "roberta-large", "xlnet-base", "xlnet-large"]
+models=["bert-base", "roberta-base"]
 
 tasks = {
     "CoLA":["mcc"],
