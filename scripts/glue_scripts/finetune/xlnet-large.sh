@@ -1,7 +1,12 @@
+#!/bin/bash
+
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate freezing
 TASK=$1
-EXP=$2
-SEED=$3
-LR=$4
+MT_DNN=$2
+EXP=$3
+SEED=$4
+LR=$5
 LAYERS_TO_FINE_TUNE="${@:5}"
 
 if [ $EXP == "BASE" ] # no fine tuning

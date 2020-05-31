@@ -1,3 +1,7 @@
+#!/bin/bash
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate freezing
+
 TASK=$1
 MT_DNN=$2
 EXP=$3

@@ -88,3 +88,9 @@ if [ ! -f xlnet-large-cased/spiece.model ]; then
     wget https://s3.amazonaws.com/models.huggingface.co/bert/xlnet-large-cased-spiece.model -O xlnet-large-cased/spiece.model
 fi
 
+sudo mv bert-base-uncased/ $TRAINED_MODEL_DIR
+sudo mv bert-large-uncased/ $TRAINED_MODEL_DIR
+sudo mv roberta-base/ $TRAINED_MODEL_DIR
+sudo mv roberta-large/ $TRAINED_MODEL_DIR
+sudo mv xlnet-base-cased/ $TRAINED_MODEL_DIR
+sudo mv xlnet-large-cased/ $TRAINED_MODEL_DIR

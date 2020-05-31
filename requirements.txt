@@ -12,3 +12,4 @@ sentencepiece
 # For XLM
 sacremoses
 scikit-learn
+tensorboardX

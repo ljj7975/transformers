@@ -100,7 +100,7 @@ def train(args, train_dataset, model, tokenizer):
         logger.info("Only training last classifier")
         args.layers_to_fine_tune = []
     elif args.layers_to_fine_tune:
-        logger.info(f"Finetuning layers: {str(args.layers_to_fine_tune)}")
+        logger.info("Finetuning layers: "+ str(args.layers_to_fine_tune))
 
     # parameters = model.named_parameters()
 
@@ -180,7 +180,7 @@ def train(args, train_dataset, model, tokenizer):
             if args.model_type == 'bert' or args.model_type == 'roberta':
                 if 'encoder' in name:
                     for layer in args.layers_to_fine_tune:
-                        if f"layer.{layer}." in name:
+                        if "layer."+str(layer)+"." in name:
                             parameters.append((name, params))
                             break
                 elif 'embeddings' in name:
@@ -191,7 +191,7 @@ def train(args, train_dataset, model, tokenizer):
             elif args.model_type == 'xlnet':
                 if 'transformer' in name:
                     for layer in args.layers_to_fine_tune:
-                        if f"layer.{layer}." in name:
+                        if "layer."+str(layer)+"." in name:
                             parameters.append((name, params))
                             break
                 else:
