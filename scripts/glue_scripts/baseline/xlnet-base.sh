@@ -7,7 +7,7 @@ TASK=$1
 SEED=$2
 LR=$3
 
-OUTPUT_DIR=$SCRATCH_DIR/models/baseline/xlnet-base/$TASK/$SEED
+OUTPUT_DIR=/tmp/models/baseline/xlnet-base/$TASK/$SEED
 mkdir -p $OUTPUT_DIR
 
 LOG_FILE_DIR=logs/baseline/xlnet-base/$TASK
@@ -38,7 +38,7 @@ then
 elif [ $TASK == "MNLI" ]
 then
     METRICS+=("acc")
-    MM_OUTPUT_DIR=$SCRATCH_DIR/models/baseline/xlnet-base/$TASK-MM/$SEED
+    MM_OUTPUT_DIR=/tmp/models/baseline/xlnet-base/$TASK-MM/$SEED
     MM_LOG_FILE_DIR=logs/baseline/xlnet-base/$TASK-MM
     mkdir -p $MM_OUTPUT_DIR
     mkdir -p $MM_LOG_FILE_DIR
@@ -64,11 +64,11 @@ echo "MODEL_DIR: "$MODEL_DIR
 
 python examples/run_glue.py \
   --model_type xlnet \
-  --model_name_or_path $TRAINED_MODEL_DIR/xlnet-base-cased \
+  --model_name_or_path /trained_model/xlnet-base-cased \
   --task_name $TASK \
   --do_train \
   --do_eval \
-  --data_dir $DATA_DIR/glue/$TASK/ \
+  --data_dir /data/glue/$TASK/ \
   --max_seq_length 128 \
   --per_gpu_train_batch_size 16 \
   --learning_rate $LR \

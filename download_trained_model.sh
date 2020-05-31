@@ -11,10 +11,10 @@ if [ ! -f bert-large-uncased/config.json ]; then
 fi
 
 if [ ! -f bert-base-uncased/pytorch_model.bin ]; then
-    nohup https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-pytorch_model.bin -O bert-base-uncased/pytorch_model.bin > bert-base-uncased-pytorch_model.out &
+    nohup wget https://cdn.huggingface.co/bert-base-uncased-pytorch_model.bin -O bert-base-uncased/pytorch_model.bin > bert-base-uncased-pytorch_model.out &
 fi
 if [ ! -f bert-large-uncased/pytorch_model.bin ]; then
-    nohup https://s3.amazonaws.com/models.huggingface.co/bert/bert-large-uncased-pytorch_model.bin -O bert-large-uncased/pytorch_model.bin > bert-large-uncased-pytorch_model.out &
+    nohup wget https://cdn.huggingface.co/bert-large-uncased-pytorch_model.bin -O bert-large-uncased/pytorch_model.bin > bert-large-uncased-pytorch_model.out &
 fi
 
 if [ ! -f bert-base-uncased/vocab.txt ]; then
@@ -88,9 +88,9 @@ if [ ! -f xlnet-large-cased/spiece.model ]; then
     wget https://s3.amazonaws.com/models.huggingface.co/bert/xlnet-large-cased-spiece.model -O xlnet-large-cased/spiece.model
 fi
 
-sudo mv bert-base-uncased/ $TRAINED_MODEL_DIR
-sudo mv bert-large-uncased/ $TRAINED_MODEL_DIR
-sudo mv roberta-base/ $TRAINED_MODEL_DIR
-sudo mv roberta-large/ $TRAINED_MODEL_DIR
-sudo mv xlnet-base-cased/ $TRAINED_MODEL_DIR
-sudo mv xlnet-large-cased/ $TRAINED_MODEL_DIR
+sudo mv bert-base-uncased/ /trained_model
+sudo mv bert-large-uncased/ /trained_model
+sudo mv roberta-base/ /trained_model
+sudo mv roberta-large/ /trained_model
+sudo mv xlnet-base-cased/ /trained_model
+sudo mv xlnet-large-cased/ /trained_model

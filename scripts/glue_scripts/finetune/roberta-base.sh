@@ -26,10 +26,10 @@ fi
 
 if [ $MT_DNN == "TRUE" ]
 then
-    OUTPUT_DIR=$SCRATCH_DIR/mt_dnn_models/roberta-base/$TASK/$LAYER_FOLDER_NAME/$SEED
+    OUTPUT_DIR=/tmp/mt_dnn_models/roberta-base/$TASK/$LAYER_FOLDER_NAME/$SEED
     LOG_FILE_DIR=mt_dnn_logs/roberta-base/$TASK/
 else
-    OUTPUT_DIR=$SCRATCH_DIR/models/roberta-base/$TASK/$LAYER_FOLDER_NAME/$SEED
+    OUTPUT_DIR=/tmp/models/roberta-base/$TASK/$LAYER_FOLDER_NAME/$SEED
     LOG_FILE_DIR=logs/roberta-base/$TASK/
 fi
 
@@ -64,10 +64,10 @@ then
     METRICS+=("acc")
     if [ $MT_DNN == "TRUE" ]
     then
-        MM_OUTPUT_DIR=$SCRATCH_DIR/mt_dnn_models/roberta-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
+        MM_OUTPUT_DIR=/tmp/mt_dnn_models/roberta-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
         MM_LOG_FILE_DIR=mt_dnn_logs/roberta-base/$TASK-MM/
     else
-        MM_OUTPUT_DIR=$SCRATCH_DIR/models/roberta-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
+        MM_OUTPUT_DIR=/tmp/models/roberta-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
         MM_LOG_FILE_DIR=logs/roberta-base/$TASK-MM/
     fi
     mkdir -p $MM_OUTPUT_DIR
@@ -94,13 +94,13 @@ then
     then
         python examples/run_glue.py \
           --model_type roberta \
-          --model_name_or_path $TRAINED_MODEL_DIR/roberta-base \
-          --mt_model_path $TRAINED_MODEL_DIR/mt-dnn-roberta/base.pt \
+          --model_name_or_path /trained_model/roberta-base \
+          --mt_model_path /trained_model/mt-dnn-roberta/base.pt \
           --task_name $TASK \
           --do_train \
           --do_eval \
           --do_lower_case \
-          --data_dir $DATA_DIR/glue/$TASK/ \
+          --data_dir /data/glue/$TASK/ \
           --max_seq_length 128 \
           --per_gpu_train_batch_size 16 \
           --learning_rate ${LR} \
@@ -113,13 +113,13 @@ then
     then
         python examples/run_glue.py \
           --model_type roberta \
-          --model_name_or_path $TRAINED_MODEL_DIR/roberta-base \
-          --mt_model_path $TRAINED_MODEL_DIR/mt-dnn-roberta/base.pt \
+          --model_name_or_path /trained_model/roberta-base \
+          --mt_model_path /trained_model/mt-dnn-roberta/base.pt \
           --task_name $TASK \
           --do_train \
           --do_eval \
           --do_lower_case \
-          --data_dir $DATA_DIR/glue/$TASK/ \
+          --data_dir /data/glue/$TASK/ \
           --max_seq_length 128 \
           --per_gpu_train_batch_size 16 \
           --learning_rate ${LR} \
@@ -133,13 +133,13 @@ then
     then
         python examples/run_glue.py \
           --model_type roberta \
-          --model_name_or_path $TRAINED_MODEL_DIR/roberta-base \
-          --mt_model_path $TRAINED_MODEL_DIR/mt-dnn-roberta/base.pt \
+          --model_name_or_path /trained_model/roberta-base \
+          --mt_model_path /trained_model/mt-dnn-roberta/base.pt \
           --task_name $TASK \
           --do_train \
           --do_eval \
           --do_lower_case \
-          --data_dir $DATA_DIR/glue/$TASK/ \
+          --data_dir /data/glue/$TASK/ \
           --max_seq_length 128 \
           --per_gpu_train_batch_size 16 \
           --learning_rate ${LR} \
@@ -155,12 +155,12 @@ else
     then
         python examples/run_glue.py \
           --model_type roberta \
-          --model_name_or_path $TRAINED_MODEL_DIR/roberta-base \
+          --model_name_or_path /trained_model/roberta-base \
           --task_name $TASK \
           --do_train \
           --do_eval \
           --do_lower_case \
-          --data_dir $DATA_DIR/glue/$TASK/ \
+          --data_dir /data/glue/$TASK/ \
           --max_seq_length 128 \
           --per_gpu_train_batch_size 16 \
           --learning_rate ${LR} \
@@ -173,12 +173,12 @@ else
     then
         python examples/run_glue.py \
           --model_type roberta \
-          --model_name_or_path $TRAINED_MODEL_DIR/roberta-base \
+          --model_name_or_path /trained_model/roberta-base \
           --task_name $TASK \
           --do_train \
           --do_eval \
           --do_lower_case \
-          --data_dir $DATA_DIR/glue/$TASK/ \
+          --data_dir /data/glue/$TASK/ \
           --max_seq_length 128 \
           --per_gpu_train_batch_size 16 \
           --learning_rate ${LR} \
@@ -192,12 +192,12 @@ else
     then
         python examples/run_glue.py \
           --model_type roberta \
-          --model_name_or_path $TRAINED_MODEL_DIR/roberta-base \
+          --model_name_or_path /trained_model/roberta-base \
           --task_name $TASK \
           --do_train \
           --do_eval \
           --do_lower_case \
-          --data_dir $DATA_DIR/glue/$TASK/ \
+          --data_dir /data/glue/$TASK/ \
           --max_seq_length 128 \
           --per_gpu_train_batch_size 16 \
           --learning_rate ${LR} \

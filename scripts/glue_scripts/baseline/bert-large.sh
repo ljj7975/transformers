@@ -7,7 +7,7 @@ TASK=$1
 SEED=$2
 LR=$3
 
-OUTPUT_DIR=$SCRATCH_DIR/models/baseline/bert-large/$TASK/$SEED
+OUTPUT_DIR=/tmp/models/baseline/bert-large/$TASK/$SEED
 mkdir -p $OUTPUT_DIR
 
 LOG_FILE_DIR=logs/baseline/bert-large/$TASK
@@ -38,7 +38,7 @@ then
 elif [ $TASK == "MNLI" ]
 then
     METRICS+=("acc")
-    MM_OUTPUT_DIR=$SCRATCH_DIR/models/baseline/bert-large/$TASK-MM/$SEED
+    MM_OUTPUT_DIR=/tmp/models/baseline/bert-large/$TASK-MM/$SEED
     MM_LOG_FILE_DIR=logs/baseline/bert-large/$TASK-MM
     mkdir -p $MM_OUTPUT_DIR
     mkdir -p $MM_LOG_FILE_DIR
@@ -64,12 +64,12 @@ echo "MODEL_DIR: "$MODEL_DIR
 
 python examples/run_glue.py \
   --model_type bert \
-  --model_name_or_path $TRAINED_MODEL_DIR/bert-large-uncased \
+  --model_name_or_path /trained_model/bert-large-uncased \
   --task_name $TASK \
   --do_train \
   --do_eval \
   --do_lower_case \
-  --data_dir $DATA_DIR/glue/$TASK/ \
+  --data_dir /data/glue/$TASK/ \
   --max_seq_length 128 \
   --per_gpu_train_batch_size 16 \
   --learning_rate $LR \

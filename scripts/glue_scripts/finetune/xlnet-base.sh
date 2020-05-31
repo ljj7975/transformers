@@ -25,7 +25,7 @@ else
 fi
 
 
-OUTPUT_DIR=$SCRATCH_DIR/models/xlnet-base/$TASK/$LAYER_FOLDER_NAME/$SEED
+OUTPUT_DIR=/tmp/models/xlnet-base/$TASK/$LAYER_FOLDER_NAME/$SEED
 mkdir -p $OUTPUT_DIR
 
 LOG_FILE_DIR=logs/xlnet-base/$TASK/
@@ -57,7 +57,7 @@ then
 elif [ $TASK == "MNLI" ]
 then
     METRICS+=("acc")
-    MM_OUTPUT_DIR=$SCRATCH_DIR/models/xlnet-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
+    MM_OUTPUT_DIR=/tmp/models/xlnet-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
     MM_LOG_FILE_DIR=logs/xlnet-base/$TASK-MM/
     mkdir -p $MM_OUTPUT_DIR
     mkdir -p $MM_LOG_FILE_DIR
@@ -81,11 +81,11 @@ if [ $EXP == "BASE" ] # no fine tuning
 then
     python examples/run_glue.py \
       --model_type xlnet \
-      --model_name_or_path $TRAINED_MODEL_DIR/xlnet-base-cased \
+      --model_name_or_path /trained_model/xlnet-base-cased \
       --task_name $TASK \
       --do_train \
       --do_eval \
-      --data_dir $DATA_DIR/glue/$TASK/ \
+      --data_dir /data/glue/$TASK/ \
       --max_seq_length 128 \
       --per_gpu_train_batch_size 16 \
       --learning_rate ${LR} \
@@ -98,11 +98,11 @@ elif [ $EXP == "FT" ] # fine tune given layers
 then
     python examples/run_glue.py \
       --model_type xlnet \
-      --model_name_or_path $TRAINED_MODEL_DIR/xlnet-base-cased \
+      --model_name_or_path /trained_model/xlnet-base-cased \
       --task_name $TASK \
       --do_train \
       --do_eval \
-      --data_dir $DATA_DIR/glue/$TASK/ \
+      --data_dir /data/glue/$TASK/ \
       --max_seq_length 128 \
       --per_gpu_train_batch_size 16 \
       --learning_rate ${LR} \
@@ -116,11 +116,11 @@ elif [ $EXP == "NONE" ] # No layers to fine tune (only classifier)
 then
     python examples/run_glue.py \
       --model_type xlnet \
-      --model_name_or_path $TRAINED_MODEL_DIR/xlnet-base-cased \
+      --model_name_or_path /trained_model/xlnet-base-cased \
       --task_name $TASK \
       --do_train \
       --do_eval \
-      --data_dir $DATA_DIR/glue/$TASK/ \
+      --data_dir /data/glue/$TASK/ \
       --max_seq_length 128 \
       --per_gpu_train_batch_size 16 \
       --learning_rate ${LR} \

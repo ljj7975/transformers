@@ -25,10 +25,10 @@ fi
 
 if [ $MT_DNN == "TRUE" ]
 then
-    OUTPUT_DIR=$SCRATCH_DIR/mt_dnn_models/bert-base/$TASK/$LAYER_FOLDER_NAME/$SEED
+    OUTPUT_DIR=/tmp/mt_dnn_models/bert-base/$TASK/$LAYER_FOLDER_NAME/$SEED
     LOG_FILE_DIR=mt_dnn_logs/bert-base/$TASK/
 else
-    OUTPUT_DIR=$SCRATCH_DIR/models/bert-base/$TASK/$LAYER_FOLDER_NAME/$SEED
+    OUTPUT_DIR=/tmp/models/bert-base/$TASK/$LAYER_FOLDER_NAME/$SEED
     LOG_FILE_DIR=logs/bert-base/$TASK/
 fi
 
@@ -63,10 +63,10 @@ then
     METRICS+=("acc")
     if [ $MT_DNN == "TRUE" ]
     then
-        MM_OUTPUT_DIR=$SCRATCH_DIR/mt_dnn_models/bert-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
+        MM_OUTPUT_DIR=/tmp/mt_dnn_models/bert-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
         MM_LOG_FILE_DIR=mt_dnn_logs/bert-base/$TASK-MM/
     else
-        MM_OUTPUT_DIR=$SCRATCH_DIR/models/bert-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
+        MM_OUTPUT_DIR=/tmp/models/bert-base/$TASK-MM/$LAYER_FOLDER_NAME/$SEED
         MM_LOG_FILE_DIR=logs/bert-base/$TASK-MM/
     fi
     mkdir -p $MM_OUTPUT_DIR
@@ -86,20 +86,19 @@ else
 fi
 
 # run finetuning
-
 if [ $MT_DNN == "TRUE" ]
 then
     if [ $EXP == "BASE" ] # no fine tuning
     then
         python examples/run_glue.py \
           --model_type bert \
-          --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
-          --mt_model_path $TRAINED_MODEL_DIR/mt-dnn-bert/base.pt \
+          --model_name_or_path /trained_model/bert-base-uncased \
+          --mt_model_path /trained_model/mt-dnn-bert/base.pt \
           --task_name $TASK \
           --do_train \
           --do_eval \
           --do_lower_case \
-          --data_dir $DATA_DIR/glue/$TASK/ \
+          --data_dir /data/glue/$TASK/ \
           --max_seq_length 128 \
           --per_gpu_train_batch_size 16 \
           --learning_rate ${LR} \
@@ -112,13 +111,13 @@ then
     then
         python examples/run_glue.py \
           --model_type bert \
-          --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
-          --mt_model_path $TRAINED_MODEL_DIR/mt-dnn-bert/base.pt \
+          --model_name_or_path /trained_model/bert-base-uncased \
+          --mt_model_path /trained_model/mt-dnn-bert/base.pt \
           --task_name $TASK \
           --do_train \
           --do_eval \
           --do_lower_case \
-          --data_dir $DATA_DIR/glue/$TASK/ \
+          --data_dir /data/glue/$TASK/ \
           --max_seq_length 128 \
           --per_gpu_train_batch_size 16 \
           --learning_rate ${LR} \
@@ -132,13 +131,13 @@ then
     then
         python examples/run_glue.py \
           --model_type bert \
-          --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
-          --mt_model_path $TRAINED_MODEL_DIR/mt-dnn-bert/base.pt \
+          --model_name_or_path /trained_model/bert-base-uncased \
+          --mt_model_path /trained_model/mt-dnn-bert/base.pt \
           --task_name $TASK \
           --do_train \
           --do_eval \
           --do_lower_case \
-          --data_dir $DATA_DIR/glue/$TASK/ \
+          --data_dir /data/glue/$TASK/ \
           --max_seq_length 128 \
           --per_gpu_train_batch_size 16 \
           --learning_rate ${LR} \
@@ -154,12 +153,12 @@ else
     then
         python examples/run_glue.py \
           --model_type bert \
-          --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+          --model_name_or_path /trained_model/bert-base-uncased \
           --task_name $TASK \
           --do_train \
           --do_eval \
           --do_lower_case \
-          --data_dir $DATA_DIR/glue/$TASK/ \
+          --data_dir /data/glue/$TASK/ \
           --max_seq_length 128 \
           --per_gpu_train_batch_size 16 \
           --learning_rate ${LR} \
@@ -172,12 +171,12 @@ else
     then
         python examples/run_glue.py \
           --model_type bert \
-          --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+          --model_name_or_path /trained_model/bert-base-uncased \
           --task_name $TASK \
           --do_train \
           --do_eval \
           --do_lower_case \
-          --data_dir $DATA_DIR/glue/$TASK/ \
+          --data_dir /data/glue/$TASK/ \
           --max_seq_length 128 \
           --per_gpu_train_batch_size 16 \
           --learning_rate ${LR} \
@@ -191,12 +190,12 @@ else
     then
         python examples/run_glue.py \
           --model_type bert \
-          --model_name_or_path $TRAINED_MODEL_DIR/bert-base-uncased \
+          --model_name_or_path /trained_model/bert-base-uncased \
           --task_name $TASK \
           --do_train \
           --do_eval \
           --do_lower_case \
-          --data_dir $DATA_DIR/glue/$TASK/ \
+          --data_dir /data/glue/$TASK/ \
           --max_seq_length 128 \
           --per_gpu_train_batch_size 16 \
           --learning_rate ${LR} \
